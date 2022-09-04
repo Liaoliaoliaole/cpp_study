@@ -1,3 +1,0 @@
-/home/lili/Documents/cpp/build/CMakeFiles/rebuild_cache.dir
-/home/lili/Documents/cpp/build/CMakeFiles/edit_cache.dir
-/home/lili/Documents/cpp/build/CMakeFiles/main.dir
