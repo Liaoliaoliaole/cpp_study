@@ -2,7 +2,7 @@
 #include "point.hpp"
 
 circle::circle(float r)
-	:point {x,y},radius{r}{
+	:point {x,y},radius{r=0.0}{
 }
 
 void circle::setRadius(float radius){
