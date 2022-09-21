@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/car.hpp
+string
+-
+point.hpp
+../include/point.hpp
+
+../include/point.hpp
+
+../include/tesla.hpp
+car.hpp
+../include/car.hpp
+
+/home/lili/Documents/cpp/p3_car/src/tesla.cpp
+cmath
+-
+tesla.hpp
+/home/lili/Documents/cpp/p3_car/src/tesla.hpp
+
