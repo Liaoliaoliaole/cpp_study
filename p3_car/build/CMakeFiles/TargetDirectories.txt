@@ -1,5 +1,0 @@
-/home/lili/Documents/cpp/p3_car/build/CMakeFiles/rebuild_cache.dir
-/home/lili/Documents/cpp/p3_car/build/CMakeFiles/edit_cache.dir
-/home/lili/Documents/cpp/p3_car/build/src/CMakeFiles/rebuild_cache.dir
-/home/lili/Documents/cpp/p3_car/build/src/CMakeFiles/edit_cache.dir
-/home/lili/Documents/cpp/p3_car/build/src/CMakeFiles/main.dir
