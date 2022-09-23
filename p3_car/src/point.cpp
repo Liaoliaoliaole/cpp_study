@@ -6,19 +6,22 @@ point::point(){
 	this->y=0;
 }
 
-point::point(float xv , float yv ){
-	this->x=xv;
-	this->y=yv;
+point::point(float x , float y){
+	this->x=x;
+	this->y=y;
 }
-
-
 point::~point(){
-	std::cout << "point distroyed" << std::endl;
+	std::cout << "point is distroyed" << std::endl;
 }
-
-float point::getX(){
+void point::setX(const float x){
+	this->x = x;
+}
+void point::setY(const float y){
+	this->y = y;
+}
+float point::getX() const{
 	return this->x;
 }
-float point::getY(){
+float point::getY()const {
 	return this->y;
 }

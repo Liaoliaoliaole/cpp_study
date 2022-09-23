@@ -11,27 +11,23 @@ public:
 	      full_tank_distance,
 		  remain_distance;
 
-
 public:
 	car();
-	//car(int year, string brand);
-	~car();
-	
-	std::string get_brand();
-	std::string get_engine();
-	int get_year();
-	float get_speed();
-	float get_full_tank_distance();
+	~car();	
+	std::string get_brand() const;
+	std::string get_engine()const;
+	int get_year()const;
+	float get_speed()const;
+	float get_full_tank_distance()const;
 	float get_remain_distance();
+	void set_brand(const std::string brand);
+	void set_engine(const std::string engine);
+	void set_year(const int year);
+	void set_speed(const float speed);
+	void set_full_tank_distance(const float ftd);
 
-	void set_brand(std::string brand);
-	void set_engine(std::string engine);
-	void set_year(int year);
-	void set_speed(float speed);
-	void set_full_tank_distance(float ftd);
 
-
-	virtual void accelerate() =0;
+	virtual void accelerate() = 0;
     virtual void brake() = 0;
 	virtual void move(float nx, float ny) = 0;
 };

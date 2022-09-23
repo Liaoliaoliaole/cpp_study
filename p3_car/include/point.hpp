@@ -6,11 +6,11 @@ public:
 	float y;
 public:
 	point();
-	point(float xv, float yv);
+	point(float x, float y);
 	~point();
-	virtual void setX(float x)=0;
-	virtual void setY(float y)=0;
-    float getX();
-	float getY();
+	void setX(const float x);
+	void setY(const float y);
+    float getX() const;
+	float getY() const;
 };
 #endif

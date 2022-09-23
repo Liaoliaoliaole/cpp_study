@@ -5,7 +5,17 @@
 int main(int argc,char*argv[]){
 	tesla t1;
 	std::cout  << t1.get_brand() << std::endl;
-	//std::cout << t1.getX() << ", " << t1.getY() << std::endl;
+	std::cout << "Tesla t1 now is at " << t1.getX() << ", " << t1.getY() << std::endl;
+	std::cout << "Tesla t1's speed is: " << t1.get_speed() << std::endl;
+	t1.accelerate();
+	t1.accelerate();
+	t1.brake();
+	std::cout << "Tesla t1's speed after twice accelerating and one brake is: " << t1.get_speed() << std::endl;
+	t1.move(3.0,4.0);
+	std::cout << "Tesla t1 has moved " << t1.full_tank_distance - t1.remain_distance << std::endl;
+	std::cout << "t1 has spent " << t1.timeConsuming(t1.full_tank_distance - t1.remain_distance) << " time." << std::endl;
+	t1.accelerate();
+	std::cout << "t1 will spend " << t1.timeConsuming(t1.remain_distance) << " time to empty the battary." << std::endl;
 	std::cout << "-----------------------------------------------------" << std::endl;
 	/*
 	circle c1(1.0);
