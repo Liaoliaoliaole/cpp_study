@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 #include <string>
 #include "car.hpp"
 
@@ -28,4 +29,18 @@ void car::set_engine(const std::string engine){this->engine=engine;}
 void car::set_year(const int year){this->year=year;}
 void car::set_speed(const float speed){this->speed = speed;}
 void car::set_full_tank_distance(const float ftd){this->full_tank_distance = ftd;}
+
+void car::move(float nx, float ny){
+    this->remain_distance -= sqrt(pow((nx-x),2)+pow((ny-y),2));
+    this->x = nx;
+    this->y = ny;
+}
+float car::timeConsuming(float distance){
+    if (distance > this->full_tank_distance){
+        std::cout << "Invalid distance!" << std::endl;
+        exit(1);
+    }else {
+        return distance/this->speed;
+    }
+}
 

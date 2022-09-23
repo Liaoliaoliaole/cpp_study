@@ -1,5 +1,4 @@
 #include <iostream>
-#include <cmath>
 #include "tesla.hpp"
 
 tesla::tesla(){
@@ -25,18 +24,4 @@ void tesla::brake(){
             this->speed -= 5;
        else
             this->speed = 0;
-}
-void tesla::move(float nx, float ny){
-    this->remain_distance -= sqrt(pow((nx-x),2)+pow((ny-y),2));
-    this->x = nx;
-    this->y = ny;
-}
-
-float tesla::timeConsuming(float distance){
-    if (distance > this->full_tank_distance){
-        std::cout << "Invalid distance!" << std::endl;
-        exit(1);
-    }else {
-        return distance/this->speed;
-    }
 }

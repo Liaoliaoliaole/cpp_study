@@ -1,4 +1,7 @@
 
+#ifndef _CAR_H_
+#define _CAR_H_
+
 #include <string>
 #include "point.hpp"
 
@@ -29,5 +32,8 @@ public:
 
 	virtual void accelerate() = 0;
     virtual void brake() = 0;
-	virtual void move(float nx, float ny) = 0;
+
+	void move(float nx, float ny);	
+    float timeConsuming(float distance);
 };
+#endif

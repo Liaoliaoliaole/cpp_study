@@ -7,6 +7,4 @@ public:
 
     void accelerate();
     void brake();
-	void move(float nx, float ny);
-    float timeConsuming(float distance);
 };
