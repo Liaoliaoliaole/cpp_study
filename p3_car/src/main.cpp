@@ -6,6 +6,8 @@
 #include "ferrari.hpp"
 #include "kia.hpp"
 
+#define PI 3.1415926
+
 int main(int argc,char*argv[]){
 	tesla t1;
 	std::cout  << t1.get_brand() << std::endl;
@@ -31,32 +33,52 @@ int main(int argc,char*argv[]){
 	std::cout << "===========================================================" << std::endl;
 	std::shared_ptr<car> shared_car_t = std::make_shared<tesla>();
 	std::shared_ptr<car> shared_car_f = std::make_shared<ferrari>();
-	std::shared_ptr<car> shared_car_k = std::make_shared<kia>();
+	auto shared_car_k = std::make_shared<kia>();
 	std::shared_ptr<kia> k2 (new kia);
-	shared_car_k=k2;
+	shared_car_k=k2;//does this distroy k2?
+	std::cout << "SharedK Use count: " << shared_car_k.use_count() << std::endl;
+	
 	k2->setX(4.0);
 	k2->setY(4.0);
+	std::cout << "The direction of k2 is  " << k2->getZeta(4.0,4.0) << std::endl;
 	k2->move(150.3,160.4);
+	std::cout << "The direction of k2 is  " << k2->getZeta(150.3,160.4) << std::endl;
 	k2->brake();
 	std::cout << "Shared Kia: " << k2->getX() << ", " << k2->getY();
 	std::cout << " has a speed of " << shared_car_k->get_speed() << " and a remain distance of " << shared_car_k->remain_distance << std::endl;
-	
+	std::cout << "===========================================================" << std::endl;
+
 	std::shared_ptr<tesla> t2 (new tesla);
-	std::shared_ptr<tesla> t3 (new tesla);
 	std::shared_ptr<kia> k1 (new kia);
 	shared_car_k=k1;
-	//k2=k1 not counting
+	//k2=k1 not work
 	shared_car_t=t2;
-	shared_car_t=t3;
+	std::cout << "SharedK Use count: " << shared_car_k.use_count() << std::endl;
+	std::cout << "SharedT Use count: " << shared_car_t.use_count() << std::endl;
+	std::cout << "===========================================================" << std::endl;
 
 	std::vector<std::shared_ptr<car>> cars;
 	cars.push_back(shared_car_t);
 	cars.push_back(shared_car_f);
 	cars.push_back(shared_car_k);
 	
+	std::cout << "SharedT Use count: " << shared_car_t.use_count() << std::endl;
+	std::cout << "SharedF Use count: " << shared_car_f.use_count() << std::endl;
+	std::cout << "SharedK Use count: " << shared_car_k.use_count() << std::endl;
+
 	for(const auto &shared_car : cars){
 		std::cout << shared_car->get_brand()  << std::endl;
 		std::cout << "Use count: " << shared_car.use_count() << std::endl;
 	}
+	std::cout << "===========================================================" << std::endl;
+	auto t4 = std::make_unique <tesla>();
+	t4->setX(8.0);
+	t4->setY(6.0);
+	t4->accelerate();
+	shared_car_t = std::move(t4);
+	std::cout << "SharedT Use count: " << shared_car_t.use_count() << std::endl;
+	//std::cout << "t4 unique ptr Use count: " << t4.use_count() << std::endl;
+	
+
 	    return 0;
 }

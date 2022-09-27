@@ -10,6 +10,7 @@ tesla::tesla(){
     this->remain_distance = 800;
     this->x = 0;
     this->y = 0;
+    std::cout << "Tesla is created!" << std::endl;
 }
 
 tesla::~tesla(){

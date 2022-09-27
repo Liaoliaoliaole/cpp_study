@@ -3,6 +3,8 @@
 #include <string>
 #include "car.hpp"
 
+#define PI 3.1415926
+
 car::car(){
     this->brand= "";
     this->engine= "";
@@ -12,6 +14,7 @@ car::car(){
     this->remain_distance = 0;
     this->x=0;
     this->y=0;
+    std::cout << "car object created" << std::endl;
 }
 car::~car(){
     std::cout << "Car is distroyed!" << std::endl;
@@ -34,6 +37,7 @@ void car::move(float nx, float ny){
     this->remain_distance -= sqrt(pow((nx-x),2)+pow((ny-y),2));
     this->x = nx;
     this->y = ny;
+    this->zeta = atan(ny/nx)*180/PI;
 }
 float car::timeConsuming(float distance){
     if (distance > this->full_tank_distance){
