@@ -1,6 +1,26 @@
 #include <iostream>
 #include <map>
+#include <unordered_map>
 #include <set>
+#include <string>
+#include <sstream>      // std::stringstream
+
+/*
+void print_map(std::map<int,int>&m){
+    for(std::map<int,int>::iterator it = m.behin();it != m.end(); it++){
+        std::cout << "Key = " << (*it).first << "value = " << it->second << std::endl;
+    }
+    std::cout << std::endl;
+}
+
+map.size();
+map.empty();
+map.swap(map2);
+
+m.insert(std::make_pair(10,string("hello")));
+
+
+*/
 
 
 void display(const std::map<std::string, std::set<int>> &m) {
@@ -17,7 +37,7 @@ void display(const std::map<std::string, std::set<int>> &m) {
 template <typename T1, typename T2>
 void display(const std::map<T1, T2> &l) {
     std::cout << "[ ";
-    for (const auto &elem: l) {
+    for (const auto &elem: l) { // auto here replace the pair
         std::cout << elem.first << ":" << elem.second << " ";
     }
     std::cout << "]  " << std::endl;
@@ -88,7 +108,34 @@ void test2() {
 
 
 int main() {
-    test1();
-    test2();
+    //test1();
+    //test2();
+    // unordered map is faster
+    /*
+    std::unordered_map<std::string,double> um;
+
+    um.insert(std::make_pair("e",2.718));
+    um["PI"]=3.14;
+
+    std::string key = "PI";
+
+    if(um.find(key)==um.end()){ // find() return a pointer
+        std::cout << key << "not found" << std::endl; //if no else, it will cause segment fault
+    }else{
+        std::cout << "found" << std::endl;
+    }
+    */
+
+    std::unordered_map<std::string, int> words;
+    std::stringstream ss;
+    std::string line;
+    std::string word;
+
+
+
+    
+
+
+
     return 0;
 }
