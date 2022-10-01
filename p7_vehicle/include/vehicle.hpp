@@ -20,7 +20,7 @@ public:
 	double get_speed() const;
 	void set_brand(const std::string brand);
 	void set_speed(const double speed);
-	virtual void accelerate(const double)=0;
-	virtual void go(const double )=0;
+	virtual void accelerate(const double acceleration);
+	virtual void go(const double distance);
 };
 #endif

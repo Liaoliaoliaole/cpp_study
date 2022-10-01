@@ -38,11 +38,14 @@ void bike::accelerate(const double acceleration){
     }
 }
 void bike::go(const double distance){
-    if(distance >= 0){
+    if(distance >= 0 && distance < 50){
         std::cout << "Your bike takes " 
             << distance/this->speed 
             << "hours for the distance of " 
             << distance <<std::endl;
+    }else if(distance >=50){
+        std::cout << "Bon courage!" << std::endl;
+
     }else{
             std::cout << "Invalid distance!" << std::endl;
         }

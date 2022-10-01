@@ -31,3 +31,10 @@ void vehicle::set_brand(const std::string brand){
 void vehicle::set_speed(const double speed){
 	this->speed = speed;
 }
+ void vehicle::accelerate(const double acceleration){
+	std::cout<< "Vehicle accelerated!" << std::endl;
+}
+
+void vehicle::go(const double distance){
+	std::cout<< "Vehicle goes!" << std::endl;
+}

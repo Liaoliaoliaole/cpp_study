@@ -38,8 +38,12 @@ void car::accelerate(const double acceleration){
     }
 }
 void car::go(const double distance){
-    std::cout << "Your car takes " 
-        << distance/this->speed 
-        << "hours for the distance of " 
-        << distance <<std::endl;
+    if(distance >= 0){
+        std::cout << "Your car takes " 
+            << distance/this->speed 
+            << "hours for the distance of " 
+            << distance <<std::endl;
+    }else{
+            std::cout << "Invalid distance!" << std::endl;
+        }
 }
