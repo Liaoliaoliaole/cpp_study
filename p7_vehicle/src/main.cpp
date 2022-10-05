@@ -31,6 +31,8 @@ int main(int argc,char*argv[]){
 		std::cout << v->get_brand() << " is at speed of " << v->get_speed() << std::endl;
 		v->accelerate(5.0);
 		std::cout << v->get_brand() << " after acceleration is at speed of " << v->get_speed() << std::endl;
+		v->accelerate(15.0);
+		std::cout << v->get_brand() << " after acceleration is at speed of " << v->get_speed() << std::endl;
 		std::cout << "-----------------------------" << std::endl;
 		v->go(30);
 		std::cout << "-----------------------------" << std::endl;
@@ -38,10 +40,13 @@ int main(int argc,char*argv[]){
 		std::cout  << std::endl;
 	}
 
-	//std::vector<vehicle>::iterator it;
-	//for(it=vehicles.begin(); it != vehicles.end();it++){
-	//	std::cout << (*it).get_brand() <<std::endl;
-	//}
+std::cout << "**********************************************************" << std::endl;
+
+	std::vector<std::shared_ptr<vehicle>>::iterator it;
+	for(it=vehicles.begin(); it != vehicles.end();it++){
+		std::cout << (*it)->get_brand() <<std::endl;
+		std::cout << (*it)->get_speed() <<std::endl;
+	}
 
 
 	return 0;

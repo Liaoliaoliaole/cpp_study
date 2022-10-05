@@ -44,7 +44,7 @@ void bike::go(const double distance){
             << "hours for the distance of " 
             << distance <<std::endl;
     }else if(distance >=50){
-        std::cout << "Bon courage!" << std::endl;
+        std::cout << "Your bike is going to travel " << distance <<", Bon courage!" << std::endl;
 
     }else{
             std::cout << "Invalid distance!" << std::endl;
