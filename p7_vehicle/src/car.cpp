@@ -6,28 +6,23 @@
 
 car::car()
 {
-    this->wheels = 2;
-	this->speed=0.0;
-	this->brand = "Unnamed";
-    this->engine = "Undefined";
-    std::cout << "Car is created!" << std::endl;
+    double speed = 0;
+	std::string brand = "unknown";
+	vehicleTypes type = vehicleTypes::car;
+    std::cout << "Car created!" << std::endl;
 }
-car::car(std::string brand, std::string engine, double speed){
-    this->wheels = 2;
-	this->speed=speed;
-	this->brand = brand;
-    this->engine = engine;
-    std::cout << "Car object is created!" << std::endl;
+car::car(const car &c):vehicle(c){
+    std::cout << "Car copied!" << std::endl;
 }
 car::~car(){
-    std::cout << "Car is distroyed!" << std::endl;
+    std::cout << "Car distroyed!" << std::endl;
 }
-std::string car::get_engine()const{
-    return this->engine;
-    }
-void car::set_engine(const std::string engine){
-    this->engine = engine;
-    }
+vehicleTypes car::get_types(void){
+    return vehicleTypes::car;
+}
+//void car::set_type(vehicleTypes type){
+//    this->type=type;
+//}
 
 void car::accelerate(const double acceleration){
     if (this->speed <= (MAXSPEED-acceleration))
@@ -37,13 +32,6 @@ void car::accelerate(const double acceleration){
         std::cout << "Invalid acceleration!" << std::endl;
     }
 }
-void car::go(const double distance){
-    if(distance >= 0){
-        std::cout << "Your car takes " 
-            << distance/this->speed 
-            << "hours for the distance of " 
-            << distance <<std::endl;
-    }else{
-            std::cout << "Invalid distance!" << std::endl;
-        }
+void car::drive(){
+        std::cout << "Vrooommmm..." << std::endl;
 }

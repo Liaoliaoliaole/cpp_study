@@ -1,16 +1,20 @@
+#ifndef _BIKE_H_
+#define _BIKE_H_
+
 #include <iostream>
 #include <string>
 #include "vehicle.hpp"
 
-class bike : public vehicle {
-
+class bike :public vehicle {
 
 public:
-    enum engine_type {MAN,ELE};
 	bike();
-    bike(std::string brand, double speed);
 	~bike();	
-	
+
+	vehicleTypes get_types(void);
+	//void set_type(vehicleTypes type);
 	void accelerate(const double acceleration);
-    void go(const double distance);
+    void pedal();
 };
+
+#endif

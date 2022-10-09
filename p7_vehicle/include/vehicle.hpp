@@ -3,24 +3,27 @@
 
 #include <iostream>
 #include <string>
-//const char *engine_types []={"none","gasoline","desile","electrical","hybrid"};
+#include <vehicleTypes.hpp>
 
 class vehicle{	
 protected:
-	int wheels;
 	double speed;
 	std::string brand;
+	vehicleTypes type;
 
 public:
 	vehicle();
-	~vehicle();
+	virtual ~vehicle()=default;
 
 	std::string get_brand()const;
-	int get_wheels() const;	
 	double get_speed() const;
+	virtual vehicleTypes get_types(void)=0;
+
 	void set_brand(const std::string brand);
 	void set_speed(const double speed);
-	virtual void accelerate(const double acceleration);
-	virtual void go(const double distance);
+	//virtual void set_type(vehicleTypes v)=0;
+
+	virtual void accelerate(const double acceleration)=0;
+	//virtual void go(const double distance)=0;
 };
 #endif

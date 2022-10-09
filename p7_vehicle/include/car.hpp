@@ -1,21 +1,28 @@
+#ifndef _CAR_H_
+#define _CAR_H_
+
 #include <iostream>
-#include <string>
+#include <memory>
 #include "vehicle.hpp"
+//#include "engineTypes.hpp"
 
 
-class car : public vehicle {
-protected:
-    std::string engine;
+class car :public vehicle {
 
 public:
 	car();
-	car(std::string brand, std::string engine, double speed);
+	car(const car &c);
 	~car();	
-	
-	void set_engine (const std::string engine);
-	std::string get_engine() const;
 
+	//void set_engine (engineTypes engine);
+	//engineTypes get_engine();
+	
+	vehicleTypes get_types(void);
+	//void set_type(vehicleTypes type);
 	void accelerate(const double acceleration);
-	void go(const double distance);
+	void drive();
+	//void go(const double distance);
 };
+
+#endif
 

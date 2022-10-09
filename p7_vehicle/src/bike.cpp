@@ -6,21 +6,20 @@
 
 bike::bike()
 {
-    this->wheels = 4;
-	this->speed=0.0;
-	this->brand = "Unnamed";
-    std::cout << "Bike is created!" << std::endl;
-}
-bike::bike(std::string brand, double speed){
-    this->wheels = 2;
-	this->speed=speed;
-	this->brand = brand;
-    std::cout << "Bike object is created!" << std::endl;
+    double speed = 0;
+	std::string brand = "unknown";
+	vehicleTypes type = vehicleTypes::bike;
+    std::cout << "Bike created!" << std::endl;
 }
 bike::~bike(){
-    std::cout << "Bike is distroyed!" << std::endl;
+    std::cout << "Bike distroyed!" << std::endl;
 }
-
+vehicleTypes bike::get_types(void){
+    return vehicleTypes::bike;
+}
+//void bike::set_type(vehicleTypes type){
+//    this->type=type;
+//}
 void bike::accelerate(const double acceleration){
     if(acceleration >=0.0){
         if (this->speed <= (MAXSPEED-acceleration))
@@ -37,16 +36,6 @@ void bike::accelerate(const double acceleration){
         }
     }
 }
-void bike::go(const double distance){
-    if(distance >= 0 && distance < 50){
-        std::cout << "Your bike takes " 
-            << distance/this->speed 
-            << "hours for the distance of " 
-            << distance <<std::endl;
-    }else if(distance >=50){
-        std::cout << "Your bike is going to travel " << distance <<", Bon courage!" << std::endl;
-
-    }else{
-            std::cout << "Invalid distance!" << std::endl;
-        }
+void bike::pedal(){
+        std::cout << "Pfffff....." << std::endl;
 }
