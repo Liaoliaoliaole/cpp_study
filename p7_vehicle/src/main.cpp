@@ -49,7 +49,7 @@ int main(int argc,char*argv[]){
 		std::cout << " is at speed of " << v->get_speed() << std::endl;
 	}
 
-	std::cout << "**********************************************************" << std::endl;
+	std::cout << "*********************************************" << std::endl;
 
 	std::list<std::shared_ptr<vehicle>>::iterator it;
 
@@ -74,31 +74,61 @@ int main(int argc,char*argv[]){
 		}
 	}
 
-std::cout << "**********************************************************" << std::endl;
+std::cout << "*************************************" << std::endl;
 
-//Exception
-for(auto &v : vehicles){
-	if(v->get_types()!=vehicleTypes::car){
-		throw "Not a car!";
-	}
-	std::shared_ptr<car> c = std::dynamic_pointer_cast<car>(v);
-	std::cout << c->get_brand();
-	c->drive();	
+//Exception stops programme processing 
 try
 {
+	for(auto &v : vehicles){
+	if(v->get_types()==vehicleTypes::car){
+	std::shared_ptr<car> c = std::dynamic_pointer_cast<car>(v);
+	std::cout << c->get_brand() << " ";
+	c->drive();	
+	}
 	
+	if(v->get_types()!=vehicleTypes::car){
+		throw v;
+	}
+	}
 }
-catch(...)
+catch(std::shared_ptr<vehicle> bv)
 {
-	std::shared_ptr<bike> b = std::dynamic_pointer_cast<bike>(v);
+	std::shared_ptr<bike> b = std::dynamic_pointer_cast<bike>(bv);
+	std::cout << b->get_brand() << " ";
 	b->pedal();
 }
 catch(const std::exception& e)
 {
 	std::cerr << e.what() << '\n';
 }
-}
+std::cout << "********************************************" << std::endl;
 
+//Exception simply wants to catch a bad value but carry on processing
+
+for(auto &v : vehicles){
+	if(v->get_types()==vehicleTypes::car){
+		std::shared_ptr<car> c = std::dynamic_pointer_cast<car>(v);
+		std::cout << c->get_brand() << " ";
+		c->drive();	
+	}
+	try
+	{
+	if(v->get_types()!=vehicleTypes::car){
+		throw v;
+	}
+	}
+	catch(std::shared_ptr<vehicle> bv)
+	{
+	std::shared_ptr<bike> b = std::dynamic_pointer_cast<bike>(bv);
+	std::cout << b->get_brand() << " ";
+	b->pedal();
+	}
+	catch(const std::exception& e)
+	{
+	std::cerr << e.what() << '\n';
+	}
+}
+std::cout << "********************************************" << std::endl;
 
 
 	return 0;
