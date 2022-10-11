@@ -109,6 +109,7 @@ int Socket::listen(int max_queue){
     return status;
 }
 
+/*
 Socket* Socket::accept(){
     struct sockaddr_storage their_addr;
     socklen_t addr_size;
@@ -119,6 +120,8 @@ Socket* Socket::accept(){
         cerr << "accept error: " << gai_strerror(errno) << endl;
     }
     Socket *newSocket = new Socket(address_info.ai_family,address_info.ai_socktype,address_info.ai_protocol);
+    
+    
     newSocket->sock = newsock;
     newSocket->port = port;
     
@@ -133,6 +136,35 @@ Socket* Socket::accept(){
     newSocket->address_info.ai_addr = (struct sockaddr *)&their_addr;
     return newSocket;
 }
+*/
+unique_ptr<Socket> Socket::accept(){
+struct sockaddr_storage their_addr;
+    socklen_t addr_size;
+    addr_size = sizeof their_addr;
+    int newsock = ::accept(sock, (struct sockaddr *)&their_addr, &addr_size);
+    if (newsock < 0) {
+        //exit(1);
+        cerr << "accept error: " << gai_strerror(errno) << endl;
+    }
+    unique_ptr<Socket> newSocket = make_unique<Socket>(address_info.ai_family,address_info.ai_socktype,address_info.ai_protocol);
+    
+    newSocket->sock = newsock;
+    newSocket->port = port;
+    
+    char host[NI_MAXHOST];
+    int status = getnameinfo((struct sockaddr *)&their_addr, sizeof(their_addr), host, sizeof(host), NULL, 0, NI_NUMERICHOST);
+    if (status < 0) {
+        //exit(1);
+        cerr << "getnameinfo error: " << gai_strerror(errno) << endl;
+    }
+    newSocket->address = host;
+    newSocket->address_info.ai_family = their_addr.ss_family;
+    newSocket->address_info.ai_addr = (struct sockaddr *)&their_addr;
+    return newSocket;
+
+
+}
+
 int Socket::socket_write(string msg){
     const char * buf = msg.c_str();
     int len = (int)strlen(buf);
@@ -281,7 +313,7 @@ void Socket::close(){
 }
 
 int Socket::select(vector<Socket> *reads, vector<Socket> *writes, vector<Socket> *exceptions,int seconds){
-    int id = reads->at(0).sock;
+    //int id = reads->at(0).sock;
     struct timeval tv;
     fd_set readfds;
     fd_set writefds;
@@ -299,7 +331,7 @@ int Socket::select(vector<Socket> *reads, vector<Socket> *writes, vector<Socket>
     
     int maxSock = 0;
     if(reads != NULL){
-        for (int i = 0; i < reads->size(); i++) {
+        for (long unsigned int i = 0; i < reads->size(); i++) {
             int sockInt = reads->at(i).sock;
             if (sockInt > maxSock) {
                 maxSock = sockInt;
@@ -308,7 +340,7 @@ int Socket::select(vector<Socket> *reads, vector<Socket> *writes, vector<Socket>
         }
     }
     if(writes != NULL){
-        for (int i = 0; i < writes->size(); i++) {
+        for (long unsigned int i = 0; i < writes->size(); i++) {
             int sockInt = writes->at(i).sock;
             if (sockInt > maxSock) {
                 maxSock = sockInt;
@@ -317,7 +349,7 @@ int Socket::select(vector<Socket> *reads, vector<Socket> *writes, vector<Socket>
         }
     }
     if(exceptions != NULL){
-        for (int i = 0; i < exceptions->size(); i++) {
+        for (long unsigned int i = 0; i < exceptions->size(); i++) {
             int sockInt = exceptions->at(i).sock;
             if (sockInt > maxSock) {
                 maxSock = sockInt;

@@ -9,6 +9,7 @@
 #ifndef SOCKET_H
 #define SOCKET_H
 #include <iostream>
+#include <memory>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -32,12 +33,14 @@ public:
     string address;
     string port;
     struct addrinfo address_info;
+
     Socket();
     Socket(int domain,int type,int protocol);
     int bind(string ip, string port);
     int connect(string ip, string port);
     int listen(int max_queue);
-    Socket* accept();
+    //Socket* accept();
+    unique_ptr<Socket> accept();
     int socket_write(string msg);
     int socket_read(string &buf,int len);
     int socket_safe_read(string &buf,int len,int seconds);

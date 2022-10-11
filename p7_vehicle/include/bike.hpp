@@ -12,7 +12,6 @@ public:
 	~bike();	
 
 	vehicleTypes get_types(void);
-	//void set_type(vehicleTypes type);
 	void accelerate(const double acceleration);
     void pedal();
 };

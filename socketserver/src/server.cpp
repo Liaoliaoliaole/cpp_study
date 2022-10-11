@@ -4,7 +4,7 @@
 int main(int argc,char* argv[]){
 string ip = "localhost";
 string port = "1244";//one port one id
-Socket *masterSocket = new Socket(AF_INET,SOCK_STREAM,0); //AF_INET (Internet mode) SOCK_STREAM (TCP mode) 0 (Protocol any)
+unique_ptr<Socket> masterSocket = make_unique <Socket>(AF_INET,SOCK_STREAM,0); //AF_INET (Internet mode) SOCK_STREAM (TCP mode) 0 (Protocol any)
 int optVal = 1;
 masterSocket->socket_set_opt(SOL_SOCKET, SO_REUSEADDR, &optVal); //You can reuse the address and the port
 masterSocket->bind(ip, port); //Bind socket on localhost:1234
@@ -23,7 +23,7 @@ while (true) {
         break;
     }
 }
-Socket *newSocket = masterSocket->accept(); //Accept the incoming connection and creates a new Socket to the client
+unique_ptr<Socket> newSocket = masterSocket->accept(); //Accept the incoming connection and creates a Socket unique_ptr to the client
 
 while (true) {
     vector<Socket> reads(1);

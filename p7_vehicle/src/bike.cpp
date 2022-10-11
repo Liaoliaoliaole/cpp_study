@@ -17,9 +17,7 @@ bike::~bike(){
 vehicleTypes bike::get_types(void){
     return vehicleTypes::bike;
 }
-//void bike::set_type(vehicleTypes type){
-//    this->type=type;
-//}
+
 void bike::accelerate(const double acceleration){
     if(acceleration >=0.0){
         if (this->speed <= (MAXSPEED-acceleration))
