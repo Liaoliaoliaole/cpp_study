@@ -30,7 +30,7 @@ int main(int argc,char*argv[]){
 	vehicles.push_back(b2);
 
 	std::cout << "**********************************************************" << std::endl;
-
+	//range based loop 
 	for(auto &v : vehicles){
 		std::cout  << v->get_brand();
 		v->accelerate(35.0);
@@ -50,7 +50,7 @@ int main(int argc,char*argv[]){
 	}
 
 	std::cout << "*********************************************" << std::endl;
-
+	//list sequence container in STL
 	std::list<std::shared_ptr<vehicle>>::iterator it;
 
 	it=vehicles.begin();
@@ -60,8 +60,22 @@ int main(int argc,char*argv[]){
 	auto c3 = std::make_shared<car>();
 	c3->set_brand("Toyota");
 	vehicles.insert(it,c3);
+	for(it=vehicles.begin(); it != vehicles.end();++it){
+		std::cout << "\t" << (*it)->get_brand() << (*it)->get_speed();
+	}
+	std::cout << std::endl;
 
-	for(it=vehicles.begin(); it != vehicles.end();it++){
+
+	advance(it,2);//it moves towards begining 2 times
+	auto b3 = std::make_shared<bike>();
+	b3->set_brand("White");
+	vehicles.insert(it,b3);
+	for(it=vehicles.begin(); it != vehicles.end();++it){
+		std::cout << "\t" << (*it)->get_brand() << (*it)->get_speed();
+	}
+	std::cout << std::endl;
+
+	for(it=vehicles.begin(); it != vehicles.end();++it){
 		if((*it)->get_types()==vehicleTypes::car){
 			//why cast fail?
 			//car &c = static_cast <car> (**it);
@@ -73,6 +87,12 @@ int main(int argc,char*argv[]){
 			std::cout << "Oooops..." << std::endl;
 		}
 	}
+
+	vehicles.sort();//what's the rule?
+	for(it=vehicles.begin(); it != vehicles.end();++it){
+		std::cout << "\t" << (*it)->get_brand() << (*it)->get_speed();
+	}
+	std::cout << std::endl;
 
 std::cout << "*************************************" << std::endl;
 
