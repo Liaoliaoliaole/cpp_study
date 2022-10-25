@@ -44,24 +44,46 @@ auto sock = make_unique<Socket>(AF_INET,SOCK_STREAM,0);
 sock->connect(ip, port);
 
 string send_cords;
+string send_cords_kick;
 string buffer;
-vector<string> cords;
+vector<string> read_cords;
+auto maali_cords = make_shared<Point>(4750,1650);
 
 while(1){
-sock->socket_write(send_cords);
+//read ball cordinates
+sleep(0.2);
 sock->socket_read(buffer, 1024);//Read 1024 bytes
 cout << buffer << endl;
-cords = split(buffer,',');
-cout << cords.at(0) <<endl;
-cout << cords.at(1) <<endl;
+//parse the buffer
+read_cords = split(buffer,',');
+cout << read_cords.at(0) <<endl;
+cout << read_cords.at(1) <<endl;
+//get integers from buffer
+int x = stoi(read_cords.at(0));
+int y = stoi(read_cords.at(1));
+auto ball_cords = make_shared<Point>(x,y);
+// calculate robot ready to kick position
+Point ready_kick(maali_cords, ball_cords);
+cout << ready_kick.get_x() << endl;
+cout << ready_kick.get_y() << endl;
 
-int x = stoi(cords.at(0));
-int y = stoi(cords.at(1));
+send_cords = ready_kick.display();
+sock->socket_write(send_cords);
+sleep(0.1);
+send_cords_kick = ball_cords->display();
+sock->socket_write(send_cords_kick);
 
-send_cords= to_string(x) + "," +to_string(y) + "\n";
-//sleep(0.2);
+
+
+
+
+/*chase the ball and kick*/
+//send_cords= to_string(x) + "," +to_string(y) + "\n";
+
 }
 sock->close();
+
+//openning show: circle dance
 /*
 while(true){
 for(auto &p : circle_dance(3000,2000,300)){
