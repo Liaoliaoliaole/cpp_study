@@ -1,8 +1,8 @@
 PROJECT(robo)
 CMAKE_MINIMUM_REQUIRED(VERSION 3.7)
 
-SET (CLIENT src/socket.cpp src/robot.cpp)
+SET (CLIENT src/socket.cpp src/robot.cpp src/vectr.cpp src/parse.cpp)
 ADD_COMPILE_OPTIONS(-Wall)
 
-ADD_EXECUTABLE(client ${CLIENT} )
+ADD_EXECUTABLE(robot ${CLIENT} )
 
