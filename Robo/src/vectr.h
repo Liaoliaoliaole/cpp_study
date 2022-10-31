@@ -1,8 +1,8 @@
 #ifndef VECTR_H
 #define VECTR_H
-#include<iostream>
-#include<cmath>
-#include"socket.h"
+
+#include <iostream>
+#include "socket.h"
 
 class Vectr
 {
@@ -11,6 +11,7 @@ public:
 
 public:
     Vectr(int i = 0, int j = 0);
+    Vectr(const Vectr &v);
     ~Vectr();
 
     int getX();

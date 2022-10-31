@@ -1,8 +1,16 @@
+#include <cmath>
+#include <string>
 #include"vectr.h"
 
 Vectr::Vectr(int i, int j) {
         this->x = i;  
         this->y = j;
+}
+
+Vectr::Vectr(const Vectr &v){
+    this->x=v.x;
+    this->y = v.y;
+
 }
 
 Vectr::~Vectr(){

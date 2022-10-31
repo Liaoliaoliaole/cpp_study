@@ -1,35 +1,55 @@
-#include <iostream>
-#include <sstream>  
-#include <iterator>
-#include <vector>
-#include <map>
+#include <bits/stdc++.h> 
 #include "parse.h"
-#include "vectr.h"
-
 using namespace std;
 
-map<string,Vectr> split(string &str){
-    for (int i = 0; i < str.size(); i++){
-        if (str[i] == ':' /*|| str[i] == ','*/){
-            str[i] = ',';
-        }       
-    }
-    map<string,Vectr> output;
-    stringstream ss(str);//用str构造新的ss，丢弃旧的
-    string line;   
-    while(getline(ss,line,'\n')){
-        stringstream s(line);
-        string sub;
-        vector<string> cord;
-        while(getline(s,sub,',')){
-            cord.push_back(sub);
+// void connectToServer(shared_ptr<Socket> sock){
+// string ip = "localhost";
+// string port = "10000";
+// //auto sock = make_unique<Socket>(AF_INET,SOCK_STREAM,0);
+// sock->connect(ip, port);
+// }
+string readFromServer(shared_ptr<Socket> sock)
+{
+    string buffer;
+    sock->socket_read(buffer, 1024);
+    cout << buffer << endl;
+    cout << "***" << endl;
+    return buffer;
+}
+
+void update(string &str,vector<shared_ptr<Object>> &o)
+{
+    stringstream ss(str);
+    string line;
+    while(getline(ss,line)){
+        char key[2];
+        float x,y;
+        sscanf(line.c_str(),"%[B-R,1-5]: %f,%f",key,&x,&y);
+        //cout << key << " " << x << " " << y << endl;
+        string s = key;
+        for(auto &ob: o){
+            if(s==(ob->getID())){
+                ob->position.x=(int)x;
+                ob->position.y=(int)y;
+            }
+            // try
+            // {
+            //     if(ob->getID() != s){
+            //     throw ob;
+            //     }
+            // }
+            // catch(shared_ptr<Object> oo)
+            // {
+            //     cout<<oo->getID();
+            // }
+            // catch(const std::exception& e)
+            // {
+            //     std::cerr << e.what() << '\n';
+            // }
         }
-        int x = stoi(cord.at(1));
-        int y = stoi(cord.at(2));
-        auto p = make_pair(cord.at(0),Vectr(x,y));
-        output.insert(p);
+
     }
-    return output;
+
 }
 
 vector<shared_ptr<Vectr>> circle_dance(int a, int b,int r){
@@ -52,5 +72,16 @@ vector<shared_ptr<Vectr>> circle_dance(int a, int b,int r){
     }
 }
 
+/*
+vector<string> split(string &s, char d){
+    vector<string> output;
+    stringstream ss(s);
+    string sub;
 
+    while(getline(ss,sub,d)){
+        output.push_back(sub);
+    }
+    return output;
+}
+*/
     
