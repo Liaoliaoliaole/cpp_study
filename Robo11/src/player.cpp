@@ -24,16 +24,14 @@ Vectr Player::readyToKick(Vectr &b)
 {
     Vectr goal(4800,1650);
     Vectr target; 
-   // double d_ballToDoor = sqrt(pow((goal.x-b.x),2) + pow((goal.y-b.y),2));
-    // double k = (goal.y-b.y)/(goal.x-b.x);
-    // target.y= static_cast<int>(abs(b.y-(k*250/sqrt(k*k+1))));
-    // target.x= static_cast<int>(abs(b.x-250/sqrt(k*k+1)));
-    // target.x= static_cast<int>((200/sqrt(pow((goal.y-b.y)/(goal.x-b.x),2)+1))+b.x);
-    // target.y = static_cast<int>(((goal.y-b.y)/(goal.x-b.x))*(target.x-b.x)+b.y);
-    // target.y= static_cast<int>(b.y-300*(b.y-goal.y)/d_ballToDoor);
-    // target.x= static_cast<int>(b.x-300*(b.x-goal.x)/d_ballToDoor);
-    target.y= static_cast<int>(1.2*b.y-160*2);
-    target.x= static_cast<int>(1.2*b.x-480*2);
+    // double d_ballToDoor = sqrt(pow((goal.x-b.x),2) + pow((goal.y-b.y),2));
+    // target.y= static_cast<int>(b.y-200*(b.y-goal.y)/d_ballToDoor);
+    // target.x= static_cast<int>(b.x-200*(b.x-goal.x)/d_ballToDoor);
+    // target.y= static_cast<int>(1.2*b.y-160*2);
+    // target.x= static_cast<int>(1.2*b.x-480*2);
+    double k= (b.y-goal.y)/(b.x-goal.x);
+    target.x= static_cast<int>(-300/sqrt(k*k+1)+b.x);
+    target.y = static_cast<int>(abs(300*k/sqrt(k*k+1)+b.y));
     return target;  
 }
 
