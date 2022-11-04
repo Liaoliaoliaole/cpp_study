@@ -8,21 +8,24 @@
 #define TARGETALLOW 300
 using namespace std;
 
-// void connectToServer(shared_ptr<Socket> sock){
-// string ip = "localhost";
-// string port = "10000";
-// //auto sock = make_unique<Socket>(AF_INET,SOCK_STREAM,0);
-// sock->connect(ip, port);
-// }
-string readFromServer(shared_ptr<Socket> sock)
+void Parse::connectToServer(shared_ptr<Socket> sock)
+{
+string ip = "localhost";
+string port = "10000";
+//auto sock = make_unique<Socket>(AF_INET,SOCK_STREAM,0);
+sock->connect(ip, port);
+}
+
+string Parse::readFromServer(shared_ptr<Socket> sock)
 {
     string buffer;
+    sock->socket_write("\n");
     sock->socket_read(buffer, 1024);
     cout << buffer << endl;
     return buffer;
 }
 
-void parseAndSetCords(string &str,vector<shared_ptr<Object>> &o)
+void Parse::parseAndSetCords(string &str,vector<shared_ptr<Object>> &o)
 {
     stringstream ss(str);
     string line;
@@ -43,45 +46,8 @@ void parseAndSetCords(string &str,vector<shared_ptr<Object>> &o)
 
 }
 
-/* void toStepTarget(shared_ptr<Socket> sock,vector<shared_ptr<Object>> &os)
-{
-    shared_ptr<Ball> b = dynamic_pointer_cast<Ball>(os.at(0));
-    shared_ptr<Player> p3 = dynamic_pointer_cast<Player>(os.at(3));   
-    cout << "---" << endl;
-    Vectr step_up(b->position.x,b->position.y+200);
-    Vectr step_down(b->position.x,b->position.y-200);
-    if(b->position.x <= p3->position.x && b->position.y <= p3->position.y)//r3 is at right up of ball
-    {
-        cout << "r3 right up" << endl;
-        sock->socket_write(step_up.printToCords());
-        p3->setPosition(step_up);
-    }
-    if (b->getPosition().x <= p3->getPosition().x && b->getPosition().y > p3->getPosition().y)//r3 is at right down of ball
-    {
-        cout << "r3 right down" << endl;
-        sock->socket_write(step_down.printToCords());   
-        p3->setPosition(step_down);                         
-    }
-        
-}
 
-void ToTarget(shared_ptr<Socket> sock,vector<shared_ptr<Object>> &os)
-{
-    shared_ptr<Ball> b = dynamic_pointer_cast<Ball>(os.at(0));
-    shared_ptr<Player> p3 = dynamic_pointer_cast<Player>(os.at(3));   
-
-    Vectr target(p3->readyToKick(b->position));
-    cout<< "target: " << target.x << "," << target.y <<endl;
-
-    if (b->getPosition().x > p3->getPosition().x)//r3 is at left side of ball 
-    {
-        cout << "r3 left" << endl;                      
-        sock->socket_write(target.printToCords());
-        p3->setPosition(target);
-    } 
-} */
-
- void planToTarget(shared_ptr<Socket> sock,vector<shared_ptr<Object>> &os)
+ void Parse::planToTarget(shared_ptr<Socket> sock,vector<shared_ptr<Object>> &os)
 {
     shared_ptr<Ball> b = dynamic_pointer_cast<Ball>(os.at(0));
     shared_ptr<Player> p3 = dynamic_pointer_cast<Player>(os.at(3));  
@@ -153,7 +119,7 @@ void ToTarget(shared_ptr<Socket> sock,vector<shared_ptr<Object>> &os)
 }
 
 
-vector<shared_ptr<Vectr>> circle_dance(int a, int b,int r){
+vector<shared_ptr<Vectr>> Parse::circle_dance(int a, int b,int r){
     if(a<r || b< r){
         cout << "invalid circle center." << endl;
         exit(-1);

@@ -8,11 +8,8 @@
 using namespace std;
 
 int main(int argc,char*argv[]){
-    //connect to RoboServer
-    string ip = "localhost";
-    string port = "10000";
     auto sock = make_shared<Socket>(AF_INET,SOCK_STREAM,0);
-    sock->connect(ip, port);
+    Parse::connectToServer(sock);
     
     //create all players and a ball
     auto ball = make_shared<Ball>();
@@ -44,14 +41,11 @@ int main(int argc,char*argv[]){
 
 while(1){
     sleep(0.02);
-    //sleep(1);
-    sock->socket_write("\n");
-    buffer = readFromServer(sock);
-    parseAndSetCords(buffer,os);
-   
-    planToTarget(sock,os);
-    
-    //openning show: circle dance()
+    buffer = Parse::readFromServer(sock);
+    Parse::parseAndSetCords(buffer,os);
+
+    Parse::planToTarget(sock,os);
+
 }    
 sock->close();
 return 0;
