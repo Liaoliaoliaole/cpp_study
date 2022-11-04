@@ -4,7 +4,8 @@
 #include "player.h"
 #include "ball.h"
 
-#define ALLOW 1
+#define ALLOW 50
+#define TARGETALLOW 300
 using namespace std;
 
 // void connectToServer(shared_ptr<Socket> sock){
@@ -84,13 +85,23 @@ void ToTarget(shared_ptr<Socket> sock,vector<shared_ptr<Object>> &os)
 {
     shared_ptr<Ball> b = dynamic_pointer_cast<Ball>(os.at(0));
     shared_ptr<Player> p3 = dynamic_pointer_cast<Player>(os.at(3));  
-    Vectr step_up(b->position.x,b->position.y+150);
-    Vectr step_down(b->position.x,b->position.y-150);
-    Vectr target(p3->readyToKick(b->position));
-    cout<< "target: " << target.x << "," << target.y <<endl;
 
-    if(b->found == true && b->position.x >1200)
+    if(b->found == true && !(b->position.x < 1200) // ball is not at our quarter side 
+        && !((b->position.x >4400) && (b->position.y <2050 && b->position.y >1250))) //ball is not already in opponent's door
     {
+        Vectr step_up(b->position.x,b->position.y+250);
+        Vectr step_down(b->position.x,b->position.y-250);
+        Vectr target(p3->readyToKick(b->position));
+        cout<< "target: " << target.x << "," << target.y <<endl;
+
+        if((abs(p3->position.x - target.x) <= TARGETALLOW)
+                            && (abs(p3->position.y - target.y) <= ALLOW))//r3 is at target position
+        {
+            cout << "r3=target" << endl;
+            sock->socket_write(b->position.printToCords());
+            //p3->setPosition(b->position);
+        }else
+        {
         if(b->getPosition().x <= p3->getPosition().x && b->getPosition().y <= p3->getPosition().y)//r3 is at right up of ball
         {
             cout << "r3 right up" << endl;
@@ -116,13 +127,12 @@ void ToTarget(shared_ptr<Socket> sock,vector<shared_ptr<Object>> &os)
                 {
                     cout << "r3=any step target" << endl;                       
                     sock->socket_write(target.printToCords()); 
-                    if(p3->position.x == target.x && p3->position.y == target.y/* abs(p3->position.x - target.x) <= ALLOW)
-                            && (abs(p3->position.y - target.y) <= ALLOW) */)//r3 is at target position
+                    if((abs(p3->position.x - target.x) <= TARGETALLOW)
+                            && (abs(p3->position.y - target.y) <= ALLOW))//r3 is at target position
                     {
                         cout << "r3=target" << endl;
-
                         sock->socket_write(b->position.printToCords());
-                    //p3->setPosition(b->position);
+                        //p3->setPosition(b->position);
                     }          
                 }                          
         }
@@ -130,22 +140,15 @@ void ToTarget(shared_ptr<Socket> sock,vector<shared_ptr<Object>> &os)
         {
             cout << "r3 left" << endl;                      
             sock->socket_write(target.printToCords());
-            if(p3->position.x == target.x && p3->position.y == target.y/* (abs(p3->position.x - target.x) <= ALLOW)
-                    && (abs(p3->position.y - target.y) <= ALLOW) */)//r3 is at target position
+            if((abs(p3->position.x - target.x) <= TARGETALLOW)
+                    && (abs(p3->position.y - target.y) <= ALLOW))//r3 is at target position
             {
                 cout << "r3=target" << endl;                       
                 sock->socket_write(b->position.printToCords());
                     //p3->setPosition(b->position);
             }
         }
-        if(p3->position.x == target.x && p3->position.y == target.y/* abs(p3->position.x - target.x) <= ALLOW)
-                            && (abs(p3->position.y - target.y) <= ALLOW) */)//r3 is at target position
-                    {
-                        cout << "r3=target" << endl;
-
-                        sock->socket_write(b->position.printToCords());
-                    //p3->setPosition(b->position);
-                    }
+        }
     }
 }
 
