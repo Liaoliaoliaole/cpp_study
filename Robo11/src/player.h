@@ -14,7 +14,7 @@ public:
     ~Player();
 
     Vectr readyToKick(Vectr &b);
-    string sendCords();
+    string sendCords(Vectr &v);
 
 };
 #endif

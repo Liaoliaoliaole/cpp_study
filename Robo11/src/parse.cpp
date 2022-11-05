@@ -45,7 +45,6 @@ void Parse::parseAndSetCords(string &str,vector<shared_ptr<Object>> &o)
 
 }
 
-
  void Parse::planToTarget(shared_ptr<Socket> sock,vector<shared_ptr<Object>> &os)
 {
     shared_ptr<Ball> b = static_pointer_cast<Ball>(os.at(0));
@@ -63,68 +62,59 @@ void Parse::parseAndSetCords(string &str,vector<shared_ptr<Object>> &o)
                             && (abs(p3->position.y - target.y) <= ALLOW))//r3 is at target position
         {
             cout << "r3=target" << endl;
-            p3->setPosition(b->position);
-            cout << "correct form?" << p3->sendCords() << endl;
-            sock->socket_write(p3->sendCords());
-            
-            
+            //p3->setPosition(b->position);
+            sock->socket_write(p3->sendCords(b->position));
         }else
         {
         if(b->getPosition().x <= p3->getPosition().x && b->getPosition().y <= p3->getPosition().y)//r3 is at right up of ball
         {
             cout << "r3 right up" << endl;
-            p3->setPosition(step_up); 
-            sock->socket_write(p3->sendCords());
+            //p3->setPosition(step_up); 
+            sock->socket_write(p3->sendCords(step_up));
             if ((abs(p3->position.x - step_down.x) <= ALLOW 
                     && abs(p3->position.y - step_down.y) <= ALLOW)
                         ||(abs(p3->position.x - step_up.x) <= ALLOW 
                             && abs(p3->position.y - step_up.y)<= ALLOW))//r3 = any step target
             {
                 cout << "r3=any step target" << endl;
-                p3->setPosition(target);  
-                cout << p3->sendCords() << endl;                     
-                sock->socket_write(p3->sendCords());
+                //p3->setPosition(target);                      
+                sock->socket_write(p3->sendCords(target));
                 
             }
         }
         if (b->getPosition().x <= p3->getPosition().x && b->getPosition().y > p3->getPosition().y)//r3 is at right down of ball
         {
                 cout << "r3 right down" << endl;
-                p3->setPosition(step_down); 
-                sock->socket_write(p3->sendCords()); 
+                //p3->setPosition(step_down); 
+                sock->socket_write(p3->sendCords(step_down)); 
                 if ((abs(p3->position.x - step_down.x) <= ALLOW 
                         && abs(p3->position.y - step_down.y) <= ALLOW)
                             ||(abs(p3->position.x - step_up.x) <= ALLOW 
                                 && abs(p3->position.y - step_up.y)<= ALLOW))//r3 = any step target
                 {
                     cout << "r3=any step target" << endl;                       
-                    p3->setPosition(target);  
-                    cout << p3->sendCords() << endl;                     
-                    sock->socket_write(p3->sendCords()); 
+                    //p3->setPosition(target);                     
+                    sock->socket_write(p3->sendCords(target)); 
                     if((abs(p3->position.x - target.x) <= TARGETALLOW)
                             && (abs(p3->position.y - target.y) <= ALLOW))//r3 is at target position
                     {
                         cout << "r3=target" << endl;
-                        p3->setPosition(b->position);
-                        cout << p3->sendCords() << endl;
-                        sock->socket_write(p3->sendCords()); 
                         //p3->setPosition(b->position);
+                        sock->socket_write(p3->sendCords(b->position)); 
                     }          
                 }                          
         }
         if (b->getPosition().x > p3->getPosition().x)//r3 is at left side of ball 
         {
             cout << "r3 left" << endl;  
-            p3->setPosition(b->position);                    
-            sock->socket_write(p3->sendCords()); 
+            //p3->setPosition(target);                     
+            sock->socket_write(p3->sendCords(target)); 
             if((abs(p3->position.x - target.x) <= TARGETALLOW)
                     && (abs(p3->position.y - target.y) <= ALLOW))//r3 is at target position
             {
                 cout << "r3=target" << endl;
-                p3->setPosition(b->position); 
-                cout << p3->sendCords() << endl;                      
-                sock->socket_write(p3->sendCords()); 
-                    //p3->setPosition(b->position);
+                //p3->setPosition(b->position);                      
+                sock->socket_write(p3->sendCords(b->position)); 
             }
         }
         }

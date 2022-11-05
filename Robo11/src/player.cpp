@@ -42,7 +42,9 @@ Vectr Player::readyToKick(Vectr &b)
 }
 
 
-string Player::sendCords()
+string Player::sendCords(Vectr &v)
 {
-    return (this->id).substr(1) + "," + to_string(this->position.x) + "," + to_string(this->position.y) + "\n";
+    string c = (this->id).substr(1) + "," + to_string(v.x) + "," + to_string(v.y) + "\n";
+    cout << "*" << c << endl;
+    return c;
 }
