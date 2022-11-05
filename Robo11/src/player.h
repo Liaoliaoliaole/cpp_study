@@ -13,6 +13,9 @@ public:
     Player(string id);
     ~Player();
 
+    
+    Vectr AMstadByPass(Vectr &b);
+    Vectr AMstadByKick(Vectr &b);
     Vectr readyToKick(Vectr &b);
     string sendCords(Vectr &v);
 

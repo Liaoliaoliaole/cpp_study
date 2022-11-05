@@ -23,6 +23,24 @@ Player::Player(string id)
 
 Player::~Player(){}
 
+Vectr Player::AMstadByPass(Vectr &b)
+{
+    Vectr goal(0,1650);
+    Vectr standBy; 
+    standBy.y= static_cast<int>(1.9*b.y-160*9);
+    standBy.x= static_cast<int>(1.9*b.x-480*9);
+    return standBy;
+}
+
+Vectr Player::AMstadByKick(Vectr &b)
+{
+    Vectr goal(4800,1650);
+    Vectr standBy; 
+    standBy.y= static_cast<int>(1.9*b.y-160*9);
+    standBy.x= static_cast<int>(1.9*b.x-480*9);
+    return standBy;
+}
+
 Vectr Player::readyToKick(Vectr &b)
 {
     Vectr goal(4800,1650);
@@ -34,9 +52,15 @@ Vectr Player::readyToKick(Vectr &b)
     // target.x= static_cast<int>(1.2*b.x-480*2);
     // if((b.x < goal.x-400 && (b.y < goal.y+400 && b.y > goal.y-400))
     //     || ((b.x>400 && (b.y < goal.y+400 && b.y > goal.y-400)))){
+    if(abs(b.x - goal.x) >=1)
+    {
     double k= (b.y-goal.y)/(b.x-goal.x);
     target.x= (int)(-250/sqrt(k*k+1)+b.x);
     target.y = (int)(abs(250*k/sqrt(k*k+1)+b.y));
+    }else
+    {
+        cout << "(!!!!!!!" << endl;
+    }
     //}
     return target;  
 }

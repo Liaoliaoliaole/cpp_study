@@ -1,9 +1,8 @@
 
 #include <unistd.h>
 #include "parse.h"
-#include "ball.h"
-#include "player.h"
-#include "opponent.h"
+#include "strategy.h"
+
 
 using namespace std;
 
@@ -39,12 +38,14 @@ int main(int argc,char*argv[]){
 
     string buffer;
 
-while(1){
+while(1)
+{
     sleep(0.02);
     buffer = Parse::readFromServer(sock);
     Parse::parseAndSetCords(buffer,os);
-
-    Parse::planToTarget(sock,os);
+    Strategy::BackDefance(sock,ball,r2);
+    //Strategy::BackDefance(sock,ball,r4);
+    Strategy::AttackingMidfield(sock,ball,r3);
 
 }    
 sock->close();
