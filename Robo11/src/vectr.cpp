@@ -16,13 +16,6 @@ Vectr::Vectr(const Vectr &v){
 Vectr::~Vectr(){
 }
 
-int Vectr::getX(){
-        return this->x;
-}
-
-int Vectr::getY(){
-        return this->y;
-}
 
 void Vectr::set(double x, double y){
     this->x=x;
@@ -61,9 +54,4 @@ double Vectr::setMagnitude(double newM){
 Vectr Vectr::zeroVector(){
 	Vectr zero(2450,1650);
 	return zero;
-}
-
-string Vectr::printToCords()
-    {
-    return to_string(this->x) + "," + to_string(this->y) + "\n";
 }

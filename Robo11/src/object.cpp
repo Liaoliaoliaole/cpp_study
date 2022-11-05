@@ -25,22 +25,6 @@ Object::Object(string id, Vectr position)
 Object::~Object(){
 }
 
-// Vectr Object::limitRange(Vectr &range)
-// {
-//     auto limitedTarget =  Vectr(range);
-//     if (limitedTarget.x < -200) {
-//       limitedTarget.x = -200;
-//     } else if (limitedTarget.x > 5000) {
-//       limitedTarget.x = 5000;
-//     } 
-//     if (limitedTarget.y < -200) {
-//       limitedTarget.y = -200;
-//     } else if (limitedTarget.y > 3500) {
-//       limitedTarget.y = 3500;
-//     } 
-//     return limitedTarget;
-// }
-
 Vectr Object::getPosition()
 {
   return this->position;

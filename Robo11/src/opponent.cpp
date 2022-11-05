@@ -20,8 +20,3 @@ Opponent::Opponent(string id)
 }
 Opponent::~Opponent()
 {}
-
-Vectr Opponent::readyToKick(Vectr  &b)
-{
-    return b;
-}

@@ -14,9 +14,6 @@ public:
     Object(string id);
     Object(string id,Vectr position);
     ~Object();
-    //Vectr limitRange(Vectr &range);
-    //virtual void move(map<string,Vectr> cords,Vectr &b, shared_ptr<Socket> &sock)=0;
-    virtual Vectr readyToKick(Vectr &b)=0;
 
     void setPosition(Vectr pos);
     Vectr getPosition();

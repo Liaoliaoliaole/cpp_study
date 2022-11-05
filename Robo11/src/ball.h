@@ -17,9 +17,6 @@ public:
     ~Ball();
     bool getFound();
     void setFound(bool status);
-
-    //void move(map<string,Vectr> cords, Vectr &b, shared_ptr<Socket> &sock);
-    Vectr readyToKick(Vectr &b);
     
 };
 

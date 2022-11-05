@@ -10,21 +10,11 @@ Ball::Ball(){
 
 Ball::Ball(Vectr b, bool s){
     this->id = "B";
-    this->position.x = b.getX();
-    this->position.y = b.getY();
+    this->position.x = b.x;
+    this->position.y = b.y;
     this->found = s;
 
 }
-
-// Ball::Ball(map<string,Vectr> cords){
-//     for(auto it = cords.cbegin(); it != cords.cend(); ++it){
-//     if(it->first == "B"){
-//         this->id = it->first;
-//         this->position.x=it->second.x;
-//         this->position.y=it->second.y;
-//     }
-//     }
-// }
 
 Ball::~Ball(){
 }
@@ -41,12 +31,6 @@ void Ball::setFound(bool status) {
     this->found = status;
 }
 
-Vectr Ball::readyToKick(Vectr &b)
-{
-    return b;
-}
-
-//void Ball::move(map<string,Vectr> cords,Vectr &b, shared_ptr<Socket> &sock){}
 
 
   

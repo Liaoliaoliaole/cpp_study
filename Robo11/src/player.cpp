@@ -1,6 +1,9 @@
 
 #include <cmath>
+#include <sstream>
+#include <bits/stdc++.h> 
 #include "player.h"
+#include "parse.h"
 
 using namespace std;
 
@@ -38,3 +41,8 @@ Vectr Player::readyToKick(Vectr &b)
     return target;  
 }
 
+
+string Player::sendCords()
+{
+    return (this->id).substr(1) + "," + to_string(this->position.x) + "," + to_string(this->position.y) + "\n";
+}
