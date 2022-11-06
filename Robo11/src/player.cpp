@@ -25,10 +25,15 @@ Player::~Player(){}
 
 Vectr Player::AMstadByPass(Vectr &b)
 {
-    Vectr goal(0,1650);
     Vectr standBy; 
-    standBy.y= static_cast<int>(1.9*b.y-160*9);
-    standBy.x= static_cast<int>(1.9*b.x-480*9);
+    standBy.x= 2400;
+    if(b.x>=1650)
+    {
+        standBy.y= b.y+300;
+    }else if(b.x<1650)
+    {
+        standBy.y= b.y-300;
+    }
     return standBy;
 }
 

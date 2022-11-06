@@ -43,8 +43,8 @@ while(1)
     sleep(0.02);
     buffer = Parse::readFromServer(sock);
     Parse::parseAndSetCords(buffer,os);
-    Strategy::BackDefance(sock,ball,r2);
-    //Strategy::BackDefance(sock,ball,r4);
+    Strategy::BackDefanceL(sock,ball,r2);
+    Strategy::BackDefanceR(sock,ball,r4);
     Strategy::AttackingMidfield(sock,ball,r3);
 
 }    
