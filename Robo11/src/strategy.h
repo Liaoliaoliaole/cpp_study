@@ -10,7 +10,7 @@ using namespace std;
 class Strategy
 {
 public:
-
+static void GoalKeeper(shared_ptr<Socket> sock,shared_ptr<Ball> &b,shared_ptr<Player> &p);
 static void BackDefanceL(shared_ptr<Socket> sock,shared_ptr<Ball> &b,shared_ptr<Player> &p);
 static void BackDefanceR(shared_ptr<Socket> sock,shared_ptr<Ball> &b,shared_ptr<Player> &p);
 static void AttackingMidfield(shared_ptr<Socket> sock,shared_ptr<Ball> &b,shared_ptr<Player> &p);

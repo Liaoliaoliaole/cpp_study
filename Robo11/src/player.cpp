@@ -5,7 +5,10 @@
 #include "player.h"
 #include "parse.h"
 
+#define RADIUS 350
+
 using namespace std;
+
 
 Player::Player()
 {
@@ -27,12 +30,12 @@ Vectr Player::AMstadByPass(Vectr &b)
 {
     Vectr standBy; 
     standBy.x= 2400;
-    if(b.x>=1650)
+    if(b.x>=1600)
     {
-        standBy.y= b.y+300;
-    }else if(b.x<1650)
+        standBy.y= b.y+RADIUS;
+    }else if(b.x<1600)
     {
-        standBy.y= b.y-300;
+        standBy.y= b.y-RADIUS;
     }
     return standBy;
 }
@@ -60,11 +63,11 @@ Vectr Player::readyToKick(Vectr &b)
     if(abs(b.x - goal.x) >=1)
     {
     double k= (b.y-goal.y)/(b.x-goal.x);
-    target.x= (int)(-250/sqrt(k*k+1)+b.x);
-    target.y = (int)(abs(250*k/sqrt(k*k+1)+b.y));
+    target.x= (int)(-RADIUS/sqrt(k*k+1)+b.x);
+    target.y = (int)(abs(RADIUS*k/sqrt(k*k+1)+b.y));
     }else
     {
-        cout << "(!!!!!!!" << endl;
+        cout << "!!!!!!!" << endl;
     }
     //}
     return target;  
