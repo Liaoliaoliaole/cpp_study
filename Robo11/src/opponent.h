@@ -8,10 +8,11 @@ using namespace std;
 class Opponent: public Object{
 
 public:
-    Opponent();
     Opponent(string id);
-    //Opponent(map<string,Vectr> cords);
     ~Opponent();
+
+    objectTypes getType();
+    Vector2 getTarget();
 
 };
 #endif

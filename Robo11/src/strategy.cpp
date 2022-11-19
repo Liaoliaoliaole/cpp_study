@@ -1,198 +1,171 @@
+/*
+ * Copyright (C) 2007 by Johan Dams, VAMK <jd@puv.fi>
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+ */
+
 #include <cmath>
 #include "strategy.h"
-
-#define ALLOW 300
-#define RADIUS 350
+#include "constants.h"
 
 using namespace std;
 
-void Strategy::AttackingMidfield(shared_ptr<Socket> sock,shared_ptr<Ball> &b,shared_ptr<Player> &p)
+void Strategy::AttackerL(vector<shared_ptr<Object>> &os)
 {
-    Vectr step_up(b->position.x,b->position.y+RADIUS);
-    Vectr step_down(b->position.x,b->position.y-RADIUS);
-    Vectr target(p->readyToKick(b->position));
-    cout<< "target: " << target.x << "," << target.y <<endl;
+    shared_ptr<Ball> b = dynamic_pointer_cast<Ball>(os.at(Constants::BALL));
+    shared_ptr<Player> p = dynamic_pointer_cast<Player>(os.at(Constants::ATTACKEL));
 
-    if(b->found == true && (b->position.x <3800 && b->position.x>1600))//ball between left midline and right midline
+    if(b->getFound()==true && b->isLeftFront()==true)
     {
-        if((b->getPosition().x <= p->getPosition().x) && (b->position.y > 1650))//ball left of player and half up of field
-        {
-            cout << "AM right of ball,ball up" << endl;
-            sock->socket_write(p->sendCords(step_up));
-            if ((p->position.x - step_up.x)*(p->position.x - step_up.x) 
-                        + (p->position.y - step_up.y)*(p->position.y - step_up.y) < ALLOW*ALLOW)//Atackmidfielder is at step up target area
-            {
-                cout << "AM at step up target" << endl; 
-                int x=0,y=0;                
-                for(x =b->position.x; x>target.x; x=x-20)
-                {
-                    y=(int)(b->position.y+sqrt(RADIUS*RADIUS-pow((x-b->position.x),2)));
-                    Vectr tmp(x,y);
-                    sock->socket_write(p->sendCords(tmp));
-                }
-                //sock->socket_write(p->sendCords(target));
-
-                if((p->position.x - target.x)*(p->position.x - target.x) + (p->position.y - target.y)*(p->position.y - target.y) < ALLOW*ALLOW)//Attackmidfielder is at target area
-                    {
-                        cout << "AM target area" << endl;
-                        sock->socket_write(p->sendCords(b->position)); 
-                    }
-            }
-        }
-        if ((b->getPosition().x <= p->getPosition().x) && (b->position.y <= 1650))//ball left of player and half down of field
-        {
-                cout << "AM rightof ball, ball down" << endl;
-                sock->socket_write(p->sendCords(step_down)); 
-                if ((p->position.x - step_down.x)*(p->position.x - step_down.x) 
-                        + (p->position.y - step_down.y)*(p->position.y - step_down.y) < ALLOW*ALLOW)
-                {
-                    cout << "AM on step down target area" << endl;  
-                    int x=0,y=0;                
-                for(x =b->position.x; x>target.x; x=x-20)
-                {
-                    y=(int)(b->position.y+sqrt(RADIUS*RADIUS-pow((x-b->position.x),2)));
-                    Vectr tmp(x,y);
-                    sock->socket_write(p->sendCords(tmp));
-                }
-                    //sock->socket_write(p->sendCords(target));
-                    }                 
-                    if((p->position.x - target.x)*(p->position.x - target.x) 
-                        + (p->position.y - target.y)*(p->position.y - target.y) < ALLOW*ALLOW)//player is at target position
-                    {
-                        cout << "AM target area" << endl;
-                        sock->socket_write(p->sendCords(b->position)); 
-                    }          
-        }                          
-        if (b->getPosition().x > p->getPosition().x)//attackmidfielder is at left of ball 
-        {
-            cout << "AM left" << endl;                      
-            sock->socket_write(p->sendCords(target));
-            if((p->position.x - target.x)*(p->position.x - target.x) 
-                        + (p->position.y - target.y)*(p->position.y - target.y) < ALLOW*ALLOW)
-            {
-                cout << "AM target" << endl;                     
-                sock->socket_write(p->sendCords(b->position)); 
-            }
-        }
-    }else if(b->found == true && (b->position.x <= 1600))
+    if(p->kickingArea(b)==true)
     {
-        Vectr V=p->AMstadByPass(b->position);
-        sock->socket_write(p->sendCords(V));
-    }else if(b->found == true && (b->position.x >= 3800))
+        cout<<"in kicking triangle" <<endl;
+        p->setTarget(b->position);
+    }else if(p->kickingArea(b)==false && p->position.x <= b->position.x)
     {
-        Vectr V=p->AMstadByKick(b->position);
-        sock->socket_write(p->sendCords(V));
+        cout<<"moving to kicking point..."<<endl;
+        Vector2 target(p->readyToKick(b));
+        
+        p->setTarget(target);
+        p->limitTarget(Constants::FIELDX/3,Constants::FIELDY/2,Constants::FIELDX,Constants::FIELDY);
+    }else if(p->kickingArea(b)==false && p->position.x > b->position.x && p->position.y >= b->position.y)
+    {
+        cout << "moving above the ball then go to kicking point" << endl;
+        Vector2 top(b->position.x,b->position.y+Constants::KICKDISTANCE);
+        p->setTarget(top);
+    }else if(p->kickingArea(b)==false && p->position.x > b->position.x && p->position.y < b->position.y)
+    {
+        cout << "moving under the ball then go to kicking point" << endl;
+        Vector2 bottom(b->position.x+Constants::KICKDISTANCE*2,b->position.y+10);
+        p->setTarget(bottom);
     }
-}
-
-/* void Strategy::BackDefanceL(shared_ptr<Socket> sock,shared_ptr<Ball> &b,shared_ptr<Player> &p)
-{
-    Vectr step_up(b->position.x,b->position.y+300);
-    Vectr normal_target(p->readyToKick(b->position));
-    Vectr target(normal_target.x,normal_target.y+100);
-
-    if(b->found == true && b->position.x <= 1600 && b->position.y >=1650) // ball is at our half side,up
-    {
-        if(b->getPosition().x <= p->getPosition().x)//player is at right side of ball 
-        {
-            cout << "Player right up" << endl;
-            sock->socket_write(p->sendCords(step_up));//p goes up of the ball
-            if ((abs(p->position.x - step_up.x) <= ALLOW 
-                            && abs(p->position.y - step_up.y)<= ALLOW))//p is at step up target
-            {
-                cout << "Player at step up target" << endl;
-                //arch path move to target
-                int x=0,y=0;                
-                for(x =b->position.x; x>target.x; x=x-20){
-                    y=(int)(b->position.y+sqrt(300*300-pow((x-b->position.x),2)));
-                    Vectr tmp(x,y);
-                    sock->socket_write(p->sendCords(tmp));
-                }                     
-            }
-        }
-        if (b->getPosition().x > p->getPosition().x)//player is at left side of ball 
-        {
-            cout << "player left" << endl;                      
-            sock->socket_write(p->sendCords(target)); 
-            if((abs(p->position.x - target.x) <= TARGETALLOW)
-                    && (abs(p->position.y - target.y) <= ALLOW))
-            {
-                cout << "player at target" << endl;                     
-                sock->socket_write(p->sendCords(b->position)); 
-            }
-        }
     }else
     {
-        
-        Vectr L(500,2050);
-        sock->socket_write(p->sendCords(L));
+        Vector2 AttakerStandby(Constants::FIELDX*3/4,Constants::FIELDY*3/4);
+        p->setTarget(AttakerStandby);
     }
 }
 
-void Strategy::BackDefanceR(shared_ptr<Socket> sock,shared_ptr<Ball> &b,shared_ptr<Player> &p)
+void Strategy::AttackerR(vector<shared_ptr<Object>> &os)
 {
-    // Vectr step_down(b->position.x,b->position.y-300);
-    // Vectr normal_target(p->readyToKick(b->position));
-    // Vectr target(normal_target.x,normal_target.y-100);
+    shared_ptr<Ball> b = dynamic_pointer_cast<Ball>(os.at(Constants::BALL));
+    shared_ptr<Player> p = dynamic_pointer_cast<Player>(os.at(Constants::ATTACKER));
 
-    // if(b->found == true && b->position.x <= 1600 && b->position.y < 1650) // ball is at our half side
-    // {
-    //     if ((b->getPosition().x <= p->getPosition().x) && (b->position.y<=1650))//p is at right side
-    //     {
-    //             cout << "player right " << endl;
-    //             sock->socket_write(p->sendCords(step_down)); 
-    //             if ((abs(p->position.x - step_down.x) <= ALLOW 
-    //                     && abs(p->position.y - step_down.y) <= ALLOW))//player at step down target
-    //             {
-    //                 cout << "player at step down target" << endl;                                          
-    //                 //arch path move to target
-    //                 int x=0,y=0;                   
-    //                 for(x =b->position.x; x>target.x; --x){
-    //                     y=(int)(b->position.y+sqrt(250*250-pow((x-b->position.x),2)));
-    //                     Vectr tmp(x,y);
-    //                     sock->socket_write(p->sendCords(tmp));
-    //                 }              
-    //                 if((abs(p->position.x - target.x) <= TARGETALLOW)
-    //                         && (abs(p->position.y - target.y) <= ALLOW))//player is at target position
-    //                 {
-    //                     cout << "player at target" << endl;
-    //                     sock->socket_write(p->sendCords(b->position)); 
-    //                 }          
-    //             }                          
-    //     }
-    //     if (b->getPosition().x > p->getPosition().x)//player is at left side of ball 
-    //     {
-    //         cout << "player left" << endl;                      
-    //         sock->socket_write(p->sendCords(target)); 
-    //         if((abs(p->position.x - target.x) <= TARGETALLOW)
-    //                 && (abs(p->position.y - target.y) <= ALLOW))
-    //         {
-    //             cout << "r3=target" << endl;                     
-    //             sock->socket_write(p->sendCords(b->position)); 
-    //         }
-    //     }
-    // }else
-    // {
+    if(b->getFound()==true && b->isRightFront()==true)
+    {
+    if(p->kickingArea(b)==true)
+    {
+        cout<<"in kicking triangle" <<endl;
+        p->setTarget(b->position);
+    }else if(p->kickingArea(b)==false && p->position.x <= b->position.x)
+    {
+        cout<<"moving to kicking point..."<<endl;
+        Vector2 target(p->readyToKick(b));
         
-    //     Vectr R(500,1450);
-    //     sock->socket_write(p->sendCords(R));
-    // }
+        p->setTarget(target);
+        p->limitTarget(Constants::FIELDX/3,0,Constants::FIELDX,Constants::FIELDY/2);
+    }else if(p->kickingArea(b)==false && p->position.x > b->position.x && p->position.y >= b->position.y)
+    {
+        cout << "moving above the ball then go to kicking point" << endl;
+        Vector2 top(b->position.x-Constants::KICKDISTANCE,b->position.y+Constants::KICKDISTANCE);
+        p->setTarget(top);
+    }else if(p->kickingArea(b)==false && p->position.x > b->position.x && p->position.y < b->position.y)
+    {
+        cout << "moving under the ball then go to kicking point" << endl;
+        Vector2 bottom(b->position.x,b->position.y-Constants::KICKDISTANCE);
+        p->setTarget(bottom);
+    }
+    }else
+    {
+        Vector2 AttakerStandby(Constants::FIELDX*3/4,Constants::FIELDY*1/4);
+        p->setTarget(AttakerStandby);
+    }
+}
 
-    int centerline = 1650;
-    int pos_x = 500;
-    Vectr top;
-    Vectr bottom;
-    Vectr target(4800, 1650);
+//BASED ON ALINE ROBOT BALL AND CENTER OG GOAL
+/* void Strategy::AttackerR(vector<shared_ptr<Object>> &os)
+{
+    shared_ptr<Ball> b = dynamic_pointer_cast<Ball>(os.at(Constants::BALL));
+    shared_ptr<Player> p = dynamic_pointer_cast<Player>(os.at(Constants::ATTACKER));
+    
+    Vector2 target(p->readyToKick(b));
+    p->limitTarget(Constants::FIELDX/3,0,Constants::FIELDX,Constants::FIELDY/2);
+
+    if(b->found == true && b->isRightFront()==true)
+    {
+        if (b->position.x <= p->position.x)
+        {
+                cout << "Midfielder right of ball, ball down" << endl;
+                Vector2 step_down(b->position.x,b->position.y-Constants::KICKDISTANCE);
+                p->setTarget(step_down);
+
+                if ((abs(p->position.x - step_down.x) <= Constants::OFFSET 
+                        && abs(p->position.y - step_down.y) <= Constants::OFFSET))
+                {
+                    cout << "Midfielder at step down target" << endl;  
+                    p->setTarget(target);
+                }                 
+                else if((abs(p->position.x - target.x) <= Constants::OFFSET)
+                            && (abs(p->position.y - target.y) <= Constants::OFFSET))
+                {
+                    cout << "Midfielder at target" << endl;
+                    p->setTarget(b->position);  
+                }          
+        }                          
+        else if (b->position.x > p->position.x) 
+        {
+            if((abs(p->position.x - target.x) <= Constants::OFFSET)
+                    && (abs(p->position.y - target.y) <= Constants::OFFSET))
+            {
+                cout << "r3=target" << endl;                     
+                p->setTarget(b->position); 
+            }else{
+                cout << "Midfielder on the left" << endl;                      
+                p->setTarget(target);
+            }
+        }
+    }
+} */
+
+void Strategy::Defender(vector<shared_ptr<Object>> &os)
+{
+    shared_ptr<Ball> b = dynamic_pointer_cast<Ball>(os.at(Constants::BALL));
+    shared_ptr<Player> pl = dynamic_pointer_cast<Player>(os.at(Constants::DEFENCELEFT));
+    shared_ptr<Player> pr = dynamic_pointer_cast<Player>(os.at(Constants::DEFENCERIGHT));
+
+    /*-------JD------*/
+    Vector2 top;
+    Vector2 bottom;
+    Vector2 target(Constants::GOALX,Constants::GOALY/2);
+    int pos_x = Constants::GOALWIDTH+100;
     top.x = pos_x;
     bottom.x = pos_x;
-    top.y = (centerline + 200) + (b->position.y - 1650) * 0.5;
-    bottom.y = (centerline - 200) - (1650 - b->position.y) * 0.5;
-    Vectr c(0, 1650);
+    /*standby position,x=500,y up and down:
+    One align at ball and opponent's center point of goal to kick away, the othe align at ball and our own center point of goal to defence.*/
+    top.y = (Constants::GOALY/2 + Constants::KICKDISTANCE) + (b->position.y - Constants::GOALY/2) * 0.5;
+    bottom.y = (Constants::GOALY/2 - Constants::KICKDISTANCE) - (Constants::GOALY/2 - b->position.y) * 0.5;
+    cout << "df station" << top.y << "and " << bottom.y <<endl;
+    /*Take c as thr center of circle, 800 is the radius, move around the center of own door*/
+    Vector2 c(0, Constants::GOALY/2);
+    Vector2 v;
     double vX = top.x - c.x;
     double vY = top.y - c.y;
     double magV = sqrt(vX * vX + vY * vY);
-    double aX = c.x + vX / magV * 800;
-    double aY = c.y + vY / magV * 800;
+    double aX = c.x + vX / magV * Constants::GOALWIDTH*2;
+    double aY = c.y + vY / magV * Constants::GOALWIDTH*2;
     top.x = aX;
     top.y = aY;
     vX = bottom.x - c.x;
@@ -202,24 +175,44 @@ void Strategy::BackDefanceR(shared_ptr<Socket> sock,shared_ptr<Ball> &b,shared_p
     aY = c.y + vY / magV * 800;
     bottom.x = aX;
     bottom.y = aY;
-    if ((b->position.x < 1200) {
-    //   robots[this.defender_top].kick(target);
-    //   robots[this.defender_bottom].kick(target);
-    } else {
-    //robots[this.defender_top].move(top, Boolean.valueOf(true), Boolean.valueOf(true), Boolean.valueOf(false));
-    //   robots[this.defender_bottom].move(bottom, Boolean.valueOf(true), Boolean.valueOf(true), Boolean.valueOf(false));
+    cout << "df station" << top.y << "and " << bottom.y <<endl;
+
+
+    if (b->position.x < Constants::FIELDX/3) 
+    {
+        Vector2 target(pl->readyToKick(b));
+        pl->setTarget(target);
+        pr->setTarget(target);
+        if(pl->kickingArea(b)==true)
+        {
+        pl->setTarget(b->position);
+        }else if(pr->kickingArea(b)==true)
+        {
+        pr->setTarget(b->position);
+        }
+    }else
+    {
+        pl->setTarget(top);
+        pr->setTarget(bottom);
     } 
+
 }
 
-void Strategy::GoalKeeper(shared_ptr<Socket> sock,shared_ptr<Ball> &b,shared_ptr<Player> &p)
+void Strategy::GoalKeeper(vector<shared_ptr<Object>> &os)
 {
-    Vectr GoalKeepPosition;
-    GoalKeepPosition.x = 120;
-    GoalKeepPosition.y = 1650 + (b->position.y - 1650) * 0.5;
-    if (GoalKeepPosition.y > 1870) {
-      GoalKeepPosition.y = 1430;
-    } else if (GoalKeepPosition.y < 1430) {
-      GoalKeepPosition.y = 1870;
-    }
-    sock->socket_write(p->sendCords(GoalKeepPosition)); 
-} */
+    shared_ptr<Ball> b = dynamic_pointer_cast<Ball>(os.at(Constants::BALL));
+    shared_ptr<Player> p = dynamic_pointer_cast<Player>(os.at(Constants::GOALKEEPER));
+    Vector2 target;
+    target.x = Constants::ROBOSIZE;
+    //Align with ball and center of our own goal
+    target.y = Constants::GOALY/2 + (b->position.y-Constants::GOALY/2)/2;
+    p->setTarget(target);
+    p->limitTarget(Constants::ROBOSIZE,Constants::GOALY/2-220,Constants::ROBOSIZE,Constants::GOALY/2+220);
+    // if(target.y > Constants::GOALY/2 + 220){
+	// 		target.y = Constants::GOALY/2 - 220;
+	// 	}
+	// 	else if(target.y < Constants::GOALY/2 - 220){
+	// 		target.y = Constants::GOALY/2 + 220;
+	// 	}
+    //p->setTarget(target);
+}

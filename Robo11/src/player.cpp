@@ -3,80 +3,132 @@
 #include <sstream>
 #include <bits/stdc++.h> 
 #include "player.h"
-#include "parse.h"
-
-#define RADIUS 350
+#include "parser.h"
+#include "constants.h"
 
 using namespace std;
-
 
 Player::Player()
 {
     this->id = " ";
-    this->position.x=2100;
-    this->position.y=1650;
+    this->position.x=Constants::NORMALIZEX;
+    this->position.y=Constants::NORMALIZEY;
+    this->target.x=Constants::NORMALIZEX;
+    this->target.y=Constants::NORMALIZEY;
 }
 
 Player::Player(string id)
 {
     this->id = id;
-    this->position.x=2100;
-    this->position.y=1650;
+    this->position.x=Constants::NORMALIZEX;
+    this->position.y=Constants::NORMALIZEY;
+    this->target.x=Constants::NORMALIZEX;
+    this->target.y=Constants::NORMALIZEY;
 }
 
 Player::~Player(){}
 
-Vectr Player::AMstadByPass(Vectr &b)
+objectTypes Player::getType()
 {
-    Vectr standBy; 
-    standBy.x= 2400;
-    if(b.x>=1600)
+    return objectTypes::Player;
+}
+
+void Player::setTarget(Vector2 &t)
+{
+    this->target.x = t.x;
+    this->target.y = t.y;
+}
+
+Vector2 Player::getTarget()
+{
+    return this->target;
+}
+
+void Player::limitTarget(int min_x, int min_y,int max_x, int max_y)
+{
+    if (this->target.x < min_x)
     {
-        standBy.y= b.y+RADIUS;
-    }else if(b.x<1600)
+        this->target.x = min_x;
+    }else if (this->target.x > max_x)
     {
-        standBy.y= b.y-RADIUS;
+        this->target.x = max_x;
     }
-    return standBy;
+    
+    if (this->target.y < min_y)
+    {
+        this->target.y = min_y;
+    }else if (this->target.y > max_y)
+    {
+        this->target.y = max_y;
+    }
 }
 
-Vectr Player::AMstadByKick(Vectr &b)
+bool Player::kickingArea(shared_ptr<Ball> &b)
 {
-    Vectr goal(4800,1650);
-    Vectr standBy; 
-    standBy.y= static_cast<int>(1.9*b.y-160*9);
-    standBy.x= static_cast<int>(1.9*b.x-480*9);
-    return standBy;
+    Vector2 up(Constants::GOALX,Constants::GOALUPY);
+    Vector2 down(Constants::GOALX,Constants::GOALDOWNY);
+    Vector2 p_up,p_down;
+    
+    if(b->isLeftFront()==true && b->isInGoal()==false && Constants::GOALX != b->position.x)
+    {
+    p_up.x = b->position.x-Constants::KICKAREA;
+    p_down.x = p_up.x;
+    //p_up.y = b->position.y+Constants::KICKAREA*(down.y-b->position.y)/(down.x-b->position.x);
+    p_up.y = b->position.y+Constants::KICKAREA*(b->position.y-Constants::GOALDOWNY)/(Constants::GOALX-b->position.x);
+    //p_down.y = b->position.y-Constants::KICKAREA*(down.y-b->position.y)/(down.x-b->position.x);
+    p_down.y = p_up.y-(Constants::GOALUPY-Constants::GOALDOWNY)*Constants::KICKAREA/(Constants::GOALX-b->position.x);
+    cout <<"ball point "<< b->position.x << "," << b->position.y <<endl;
+    cout <<"up point "<< p_up.x << "," << p_up.y <<endl;
+    cout <<"down point "<< p_down.x << "," << p_down.y <<endl;
+        if (this->position.isInTriangle(b->position,p_down,p_up,this->position)==true)
+        {
+            return true;
+        }else{
+            return false;
+        }
+    }else if(b->isRightFront()==true && b->isInGoal()==false && down.x != b->position.x)
+    {
+    p_up.x = b->position.x-Constants::KICKAREA;
+    p_down.x = p_up.x;   
+    p_down.y = b->position.y-Constants::KICKAREA*(Constants::GOALUPY-b->position.y)/(Constants::GOALX-b->position.x);
+    p_up.y = b->position.y-Constants::KICKAREA*(Constants::GOALDOWNY-b->position.y)/(Constants::GOALX-b->position.x);
+    cout <<"ball point "<< b->position.x << "," << b->position.y <<endl;
+    cout <<"up point "<< p_up.x << "," << p_up.y <<endl;
+    cout <<"down point "<< p_down.x << "," << p_down.y <<endl;
+        if (this->position.isInTriangle(b->position,p_down,p_up,this->position)==true)
+        {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }
 
-Vectr Player::readyToKick(Vectr &b)
+Vector2 Player::readyToKick(shared_ptr<Ball> &b)
 {
-    Vectr goal(4800,1650);
-    Vectr target; 
+    Vector2 goal(Constants::FIELDX,Constants::FIELDY/2);
+    
     // double d_ballToDoor = sqrt(pow((goal.x-b.x),2) + pow((goal.y-b.y),2));
     // target.y= static_cast<int>(b.y-200*(b.y-goal.y)/d_ballToDoor);
-    // target.x= static_cast<int>(b.x-200*(b.x-goal.x)/d_ballToDoor);
-    // target.y= static_cast<int>(1.2*b.y-160*2);
-    // target.x= static_cast<int>(1.2*b.x-480*2);
-    // if((b.x < goal.x-400 && (b.y < goal.y+400 && b.y > goal.y-400))
-    //     || ((b.x>400 && (b.y < goal.y+400 && b.y > goal.y-400)))){
-    if(abs(b.x - goal.x) >=1)
+    if(b->getFound()==true && b->isInGoal()==false && goal.x != (b->position.x))
     {
-    double k= (b.y-goal.y)/(b.x-goal.x);
-    target.x= (int)(-RADIUS/sqrt(k*k+1)+b.x);
-    target.y = (int)(abs(RADIUS*k/sqrt(k*k+1)+b.y));
+        Vector2 target; 
+        float k;
+        k = ((float)(goal.y-b->position.y))/(float)(goal.x -(b->position.x));
+        target.x = (int)(-Constants::KICKDISTANCE/sqrt(k*k+1)+b->position.x);  
+        if(k<0)
+        {
+            target.y = (int)(-Constants::KICKDISTANCE*k/sqrt(k*k+1)+b->position.y);
+        }else if (k>0)
+        {
+            target.y = (int)(-Constants::KICKDISTANCE*k/sqrt(k*k+1)+b->position.y);
+        }  
+        
+        cout<<"ready to kick ponit "<<target.x << "," << target.y <<endl; 
+        return target;  
     }else
     {
-        cout << "!!!!!!!" << endl;
+        return b->position;
     }
-    //}
-    return target;  
-}
-
-
-string Player::sendCords(Vectr &v)
-{
-    string c = (this->id).substr(1) + "," + to_string(v.x) + "," + to_string(v.y) + "\n";
-    cout << "*" << c << endl;
-    return c;
 }

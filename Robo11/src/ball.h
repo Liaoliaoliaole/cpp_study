@@ -12,12 +12,16 @@ public:
 
 public:
     Ball();
-    Ball(Vectr b,bool s);
-    //Ball(map<string,Vectr> cords);
     ~Ball();
-    bool getFound();
-    void setFound(bool status);
     
+    bool getFound();
+    objectTypes getType();
+    Vector2 getTarget();
+    bool isInGoal();
+    bool isLeftFront(); 
+    bool isLeftBack();
+    bool isRightFront();
+    bool isRightBack();  
 };
 
 #endif

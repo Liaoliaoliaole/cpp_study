@@ -7,17 +7,21 @@
 using namespace std;
 
 class Player: public Object{
-
+private:
+    Vector2 target;
 public:
     Player();
     Player(string id);
     ~Player();
 
-    
-    Vectr AMstadByPass(Vectr &b);
-    Vectr AMstadByKick(Vectr &b);
-    Vectr readyToKick(Vectr &b);
-    string sendCords(Vectr &v);
+    objectTypes getType();
+    void setTarget(Vector2 &t);
+    Vector2 getTarget();
+
+    Vector2 readyToKick(shared_ptr<Ball> &b);
+    void limitTarget(int min_x, int min_y,int max_x, int max_y);
+    bool kickingArea(shared_ptr<Ball> &b);
+
 
 };
 #endif
