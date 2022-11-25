@@ -21,6 +21,7 @@ THE SOFTWARE.
 #include "strategy.h"
 #include "constants.h"
 
+
 using namespace std;
 
 void Strategy::AttackerL(vector<shared_ptr<Object>> &os)
@@ -58,6 +59,44 @@ void Strategy::AttackerL(vector<shared_ptr<Object>> &os)
         p->setTarget(AttakerStandby);
     }
 }
+
+/*
+void Strategy::AttackerL(vector<shared_ptr<Object>> &os)
+{
+    shared_ptr<Ball> b = dynamic_pointer_cast<Ball>(os.at(Constants::BALL));
+    shared_ptr<Player> p = dynamic_pointer_cast<Player>(os.at(Constants::ATTACKEL));
+
+    if(b->getFound()==true && b->isLeftFront()==true)
+    {
+    if(p->kickingArea(b)==true)
+    {
+        cout<<"in kicking triangle" <<endl;
+        p->setTarget(b->position);
+    }else if(p->kickingArea(b)==false && p->position.x <= b->position.x)
+    {
+        cout<<"moving to kicking point..."<<endl;
+        Vector2 target(p->readyToKick(b));
+        
+        p->setTarget(target);
+        p->limitTarget(Constants::FIELDX/3,Constants::FIELDY/2,Constants::FIELDX,Constants::FIELDY);
+    }else if(p->kickingArea(b)==false && p->position.x > b->position.x && p->position.y >= b->position.y)
+    {
+        cout << "moving above the ball then go to kicking point" << endl;
+        Vector2 top(b->position.x,b->position.y+Constants::KICKDISTANCE);
+        p->setTarget(top);
+    }else if(p->kickingArea(b)==false && p->position.x > b->position.x && p->position.y < b->position.y)
+    {
+        cout << "moving under the ball then go to kicking point" << endl;
+        Vector2 bottom(b->position.x+Constants::KICKDISTANCE*2,b->position.y+10);
+        p->setTarget(bottom);
+    }
+    }else
+    {
+        Vector2 AttakerStandby(Constants::FIELDX*3/4,Constants::FIELDY*3/4);
+        p->setTarget(AttakerStandby);
+    }
+}
+*/
 
 void Strategy::AttackerR(vector<shared_ptr<Object>> &os)
 {
