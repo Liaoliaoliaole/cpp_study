@@ -1,0 +1,16 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/lili/Documents/ExternalInclude/Eigen/source_dir/test/initializer_list_construction.cpp"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"BuildOfficial"
+		],
+		"name" : "initializer_list_construction_5"
+	}
+}

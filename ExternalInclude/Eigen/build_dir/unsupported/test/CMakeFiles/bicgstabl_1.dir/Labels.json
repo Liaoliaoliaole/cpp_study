@@ -1,0 +1,16 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/lili/Documents/ExternalInclude/Eigen/source_dir/unsupported/test/bicgstabl.cpp"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"BuildUnsupported"
+		],
+		"name" : "bicgstabl_1"
+	}
+}

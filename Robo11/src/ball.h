@@ -17,6 +17,8 @@ public:
     bool getFound();
     objectTypes getType();
     Vector2 getTarget();
+    void initKalmanFilter();
+    Vector2 getNextPosition();
     bool isInGoal();
     bool isLeftFront(); 
     bool isLeftBack();
