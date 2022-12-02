@@ -24,53 +24,56 @@
         this->F = F_in;
     }
 
-    void KalmanFilter::SetP()
+    void KalmanFilter::SetP(float ps,float pv)
     {
         Eigen::MatrixXd P_in(4, 4);
-        P_in << Constants::PS, 0.0, 0.0, 0.0,
-                0.0, Constants::PS, 0.0, 0.0,
-                0.0, 0.0, Constants::PV, 0.0,
-                0.0, 0.0, 0.0, Constants::PV,0.0;
+        P_in << ps, 0.0, 0.0, 0.0,
+                0.0, ps, 0.0, 0.0,
+                0.0, 0.0, pv, 0.0,
+                0.0, 0.0, 0.0, pv;
         this->P= P_in;
     }
 
-    void KalmanFilter::SetQ()
+    void KalmanFilter::SetQ(float q)
     {
         Eigen::MatrixXd Q_in(4, 4);
-        Q_in << Constants::T, 0.0, 0.0, 0.0,
-                0.0, Constants::T, 0.0, 0.0,
-                0.0, 0.0, Constants::T, 0.0,
-                0.0, 0.0, 0.0, Constants::T;
+        Q_in << q, 0.0, 0.0, 0.0,
+                0.0, q, 0.0, 0.0,
+                0.0, 0.0, q, 0.0,
+                0.0, 0.0, 0.0, q;
         this->Q = Q_in;
     }
 
-    void KalmanFilter::SetH()
+    void KalmanFilter::SetH(float h)
     {
         Eigen::MatrixXd H_in(2, 4);
-        H_in << 1.0, 0.0, 0.0, 0.0,
-                0.0, 1.0, 0.0, 0.0;
+        H_in << h, 0.0, 0.0, 0.0,
+                0.0, h, 0.0, 0.0;
         this->H = H_in;
     }
 
-    void KalmanFilter::SetR()
+    void KalmanFilter::SetR(float r)
     {
         Eigen::MatrixXd R_in(2, 2);
-        R_in << Constants::R, 0.0,
-                0.0, Constants::R;
+        R_in << r, 0.0,
+                0.0, r;
         this->R = R_in;
     }
 
     // predict state vector and state covariance matrix
     void KalmanFilter::prediction()
     {
-        this->x = this->F * this->x/* +this->u */;
-        Eigen::MatrixXd Ft = this->F.transpose();
-        this->P = this->F * this->P * Ft + this->Q;
+        //matrix1 column must equal to matrix2 row 
+        this->x = (this->F) * (this->x)/* +this->u */;
+        Eigen::MatrixXd Ft = (this->F).transpose();
+        this->P = (this->F) * (this->P) * Ft + (this->Q);
+
     }
 
     // update state vector and state covariance matrix
     void KalmanFilter::measurementUpdate(const Eigen:: VectorXd &z)
     {
+        
         Eigen::VectorXd y = z - this->H * this->x;
         Eigen::MatrixXd S = this->H * this->P * this->H.transpose() + this->R;
         // Kalman Gain

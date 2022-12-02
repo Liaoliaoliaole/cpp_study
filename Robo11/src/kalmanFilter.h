@@ -11,12 +11,12 @@ private:
     Eigen::VectorXd x; //old state
     //Eigen::VectorXd z; //new state
 
-    //Eigen::VectorXd u;//acceleration
     Eigen::MatrixXd F;//time interval
     Eigen::MatrixXd P;//coveriance
     Eigen::MatrixXd H;//measurement matrix
     Eigen::MatrixXd R;//measurement noise covariance
-    Eigen::MatrixXd Q;//process noise covariance
+    Eigen::MatrixXd Q;//process noise covariance 
+
 public:
     KalmanFilter(){ is_initialized = false;};
     ~KalmanFilter(){}
@@ -29,10 +29,10 @@ public:
     bool isInitialized();
     void initialization(Eigen::VectorXd x_in);
     void SetF();
-    void SetP();
-    void SetQ();
-    void SetH();
-    void SetR();
+    void SetP(float ps,float pv);
+    void SetQ(float q);
+    void SetH(float h);
+    void SetR(float r);
     void prediction();
     void measurementUpdate(const Eigen:: VectorXd &z);
 };
