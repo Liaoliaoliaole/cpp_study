@@ -24,8 +24,3 @@ const int Constants::NORMALIZEX;
 const int Constants::NORMALIZEY;
 
 const float Constants::T=0.02f;
-
-// const float Constants::PS=1.0f;
-// const float Constants::PV=100.0f;
-// const float Constants::Q=1.0f;
-// const float Constants::R = 0.0f;

@@ -35,14 +35,12 @@ void Strategy::AttackerL(vector<shared_ptr<Object>> &os)
     if(p->kickingArea(b)==true)
     {
         cout<<"in kicking triangle" <<endl;
-        //p->setTarget(b->position);
-        Vector2 x=b->getNextPosition();
+        Vector2 x=b->position;
         p->setTarget(x);
     }else if(p->kickingArea(b)==false && p->position.x <= b->position.x)
     {
         cout<<"moving to kicking point..."<<endl;
-        Vector2 target(p->readyToKick(b));
-        
+        Vector2 target(p->readyToKick(b));        
         p->setTarget(target);
         p->limitTarget(Constants::FIELDX/3,Constants::FIELDY/2,Constants::FIELDX,Constants::FIELDY);
     }else if(p->kickingArea(b)==false && p->position.x > b->position.x && p->position.y >= b->position.y)

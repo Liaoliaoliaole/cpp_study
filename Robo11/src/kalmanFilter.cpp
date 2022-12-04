@@ -1,87 +1,62 @@
+#include <iostream>
+#include <stdexcept>
+
 #include "kalmanFilter.h"
-#include "constants.h"
 
-    // get flag of initialization
-    bool KalmanFilter::isInitialized()
-    {
-        return is_initialized;
-    }
+KalmanFilter::KalmanFilter(
+    double dt,
+    const Eigen::MatrixXd& A,
+    const Eigen::MatrixXd& C,
+    const Eigen::MatrixXd& Q,
+    const Eigen::MatrixXd& R,
+    const Eigen::MatrixXd& P)
+  : A(A), C(C), Q(Q), R(R), P0(P),
+    m(C.rows()), n(A.rows()), dt(dt), initialized(false),
+    I(n, n), x_hat(n), x_hat_new(n)
+{
+  I.setIdentity();
+}
 
-    // initialize kalman filter
-    void KalmanFilter::initialization(Eigen::VectorXd x_in)
-    {
-        this->x = x_in;
-        is_initialized = true;
-    }
+KalmanFilter::KalmanFilter() {}
 
-    void KalmanFilter::SetF()
-    {
-        Eigen::MatrixXd F_in(4, 4);
-        F_in << 1.0, 0.0, Constants::T, 0.0,
-                0.0, 1.0, 0.0, Constants::T,
-                0.0, 0.0, 1.0, 0.0,
-                0.0, 0.0, 0.0, 1.0;
-        this->F = F_in;
-    }
+bool KalmanFilter::initializationStatus(){
+    return this->initialized;
+}
 
-    void KalmanFilter::SetP(float ps,float pv)
-    {
-        Eigen::MatrixXd P_in(4, 4);
-        P_in << ps, 0.0, 0.0, 0.0,
-                0.0, ps, 0.0, 0.0,
-                0.0, 0.0, pv, 0.0,
-                0.0, 0.0, 0.0, pv;
-        this->P= P_in;
-    }
+void KalmanFilter::init(double t0, const Eigen::VectorXd& x0) {
+  x_hat = x0;
+  P = P0;
+  this->t0 = t0;
+  t = t0;
+  initialized = true;
+}
 
-    void KalmanFilter::SetQ(float q)
-    {
-        Eigen::MatrixXd Q_in(4, 4);
-        Q_in << q, 0.0, 0.0, 0.0,
-                0.0, q, 0.0, 0.0,
-                0.0, 0.0, q, 0.0,
-                0.0, 0.0, 0.0, q;
-        this->Q = Q_in;
-    }
+void KalmanFilter::init() {
+  x_hat.setZero();
+  P = P0;
+  t0 = 0;
+  t = t0;
+  initialized = true;
+}
 
-    void KalmanFilter::SetH(float h)
-    {
-        Eigen::MatrixXd H_in(2, 4);
-        H_in << h, 0.0, 0.0, 0.0,
-                0.0, h, 0.0, 0.0;
-        this->H = H_in;
-    }
+void KalmanFilter::update(const Eigen::VectorXd& y) {
 
-    void KalmanFilter::SetR(float r)
-    {
-        Eigen::MatrixXd R_in(2, 2);
-        R_in << r, 0.0,
-                0.0, r;
-        this->R = R_in;
-    }
+  if(!initialized)
+    throw std::runtime_error("Filter is not initialized!");
 
-    // predict state vector and state covariance matrix
-    void KalmanFilter::prediction()
-    {
-        //matrix1 column must equal to matrix2 row 
-        this->x = (this->F) * (this->x)/* +this->u */;
-        Eigen::MatrixXd Ft = (this->F).transpose();
-        this->P = (this->F) * (this->P) * Ft + (this->Q);
+  x_hat_new = A * x_hat;
+  P = A*P*A.transpose() + Q;
+  K = P*C.transpose()*(C*P*C.transpose() + R).inverse();
+  x_hat_new += K * (y - C*x_hat_new);
+  P = (I - K*C)*P;
+  x_hat = x_hat_new;
 
-    }
+  t += dt;
+}
 
-    // update state vector and state covariance matrix
-    void KalmanFilter::measurementUpdate(const Eigen:: VectorXd &z)
-    {
-        
-        Eigen::VectorXd y = z - this->H * this->x;
-        Eigen::MatrixXd S = this->H * this->P * this->H.transpose() + this->R;
-        // Kalman Gain
-        Eigen::MatrixXd K = this->P * this->H.transpose() * S.inverse();
-        // estimate state vector
-        this->x = this->x + K * y;
-        int size = this->x.size();
-        Eigen::MatrixXd I = Eigen::MatrixXd::Identity(size, size);
-        // update state covariance matrix
-        this->P = (I - K * this->H) * this->P;
-    }
+void KalmanFilter::update(const Eigen::VectorXd& y, double dt, const Eigen::MatrixXd A) {
+
+  this->A = A;
+  this->dt = dt;
+  update(y);
+}

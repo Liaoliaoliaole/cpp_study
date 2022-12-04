@@ -3,6 +3,7 @@
 
 #include "vector2.h"
 #include "kalmanFilter.h"
+#include "constants.h"
 
 enum class objectTypes{None,Ball,Player,Opponent};
 
@@ -15,6 +16,11 @@ public:
     string id;
     KalmanFilter kf;
     objectTypes type;
+
+public:
+    static int n;//number of states
+    static int m;// Number of measurements
+    static float dt;//Time step
 
 public:
     Object();

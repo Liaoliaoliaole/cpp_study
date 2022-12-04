@@ -10,6 +10,12 @@ class Ball: public Object{
 public:
     bool found;
 
+    static Eigen::MatrixXd A; // System dynamics matrix
+    static Eigen::MatrixXd C; // Output matrix
+    static Eigen::MatrixXd Q; // Process noise covariance
+    static Eigen::MatrixXd R; // Measurement noise covariance
+    static Eigen::MatrixXd P; // Estimate error covariance
+
 public:
     Ball();
     ~Ball();

@@ -108,65 +108,64 @@ bool Player::kickingArea(shared_ptr<Ball> &b)
 Vector2 Player::readyToKick(shared_ptr<Ball> &b)
 {
     Vector2 goal(Constants::FIELDX,Constants::FIELDY/2);
-    
-    // double d_ballToDoor = sqrt(pow((goal.x-b.x),2) + pow((goal.y-b.y),2));
-    // target.y= static_cast<int>(b.y-200*(b.y-goal.y)/d_ballToDoor);
+         if(!b->kf.initializationStatus()){
+         b->initKalmanFilter();
+         }
+         Vector2 guessX = b->getNextPosition();
+
     if(b->getFound()==true && b->isInGoal()==false && goal.x != (b->position.x))
     {
         Vector2 target; 
         float k;
-        k = ((float)(goal.y-b->position.y))/(float)(goal.x -(b->position.x));
-        target.x = (int)(-Constants::KICKDISTANCE/sqrt(k*k+1)+b->position.x);  
+        k = ((float)(goal.y-guessX.y))/(float)(goal.x -(guessX.x));
+        target.x = (int)(-Constants::KICKDISTANCE/sqrt(k*k+1)+guessX.x);  
         if(k<0)
         {
-            target.y = (int)(-Constants::KICKDISTANCE*k/sqrt(k*k+1)+b->position.y);
+            target.y = (int)(-Constants::KICKDISTANCE*k/sqrt(k*k+1)+guessX.y);
         }else if (k>0)
         {
-            target.y = (int)(-Constants::KICKDISTANCE*k/sqrt(k*k+1)+b->position.y);
+            target.y = (int)(-Constants::KICKDISTANCE*k/sqrt(k*k+1)+guessX.y);
         }  
         
         cout<<"ready to kick ponit "<<target.x << "," << target.y <<endl; 
         return target;  
     }else
     {
-        return b->position;
+        return guessX;
     }
 }
 
+// Vector2 Player::readyToKick(shared_ptr<Ball> &b)
+// {
+//     if(b->getFound()==true && b->isInGoal()==false && goal.x != (b->position.x))
+//     {
+//         Vector2 target; 
+//         float k;
+//         k = ((float)(goal.y-b->position.y))/(float)(goal.x -(b->position.x));
+//         target.x = (int)(-Constants::KICKDISTANCE/sqrt(k*k+1)+b->position.x);  
+//         if(k<0)
+//         {
+//             target.y = (int)(-Constants::KICKDISTANCE*k/sqrt(k*k+1)+b->position.y);
+//         }else if (k>0)
+//         {
+//             target.y = (int)(-Constants::KICKDISTANCE*k/sqrt(k*k+1)+b->position.y);
+//         }  
+        
+//         cout<<"ready to kick ponit "<<target.x << "," << target.y <<endl; 
+//         return target;  
+//     }else
+//     {
+//         return b->position;
+//     }
+// }
+
 void Player::initKalmanFilter()
 {
-  Eigen::VectorXd x_in(4, 1);
-  x_in << this->position.x,this->position.y,0.0,0.0;
-  cout << "-----------------Kalman filter input Sx is: " << x_in(0)<< ", output Sy is: " << x_in(1) << std::endl;
-  if(!this->kf.isInitialized()){
-  this->kf.initialization(x_in);
-  /*Only the position of the ball can be measured, the speed cannot be measured. 
-    Therefore, for the covariance matrix setup:
-    for the position information, it is accurate and the uncertainty is low, set to 1.0; 
-    for the speed information, the uncertainty is high, set to 100.*/
-  this->kf.SetP(1.0,100.0);
-  /*Q has an impact on the entire system, but it is not too sure how much impact it has on the system. 
-    This effect cannot be estimated by previous state transitions.*/
-  this->kf.SetQ(1.0);
-  this->kf.SetH(1.0);
-   /*Usually provide by sensor anufacture.
-   A sensor that measures 100% exactly has a variance of σ ²= 0 (it does not exist).*/
-  this->kf.SetR(0.0);
-  kf.SetF(); 
-  }  
+  
 }
 
 Vector2 Player::getNextPosition()
 {
-  // predict state vector x and state covariance matrix P
-  this->kf.prediction();
-  // update state vector x and state covariance matrix P
-  Eigen::VectorXd z(2,1);
-  z << this->nextPosition.x, this->nextPosition.y;
-  this->kf.measurementUpdate(z);
-  Eigen::VectorXd x_out(4,1);
-  x_out = this->kf.GetX();
-  cout << "-----------------Kalman filter output Sx is: " << x_out(0)<< ", output Sy is: " << x_out(1) << std::endl;
-  Vector2 r(x_out(0),x_out(1));
+  Vector2 r(0,0);
   return r;
 }

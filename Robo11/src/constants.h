@@ -27,12 +27,7 @@ static const int ATTACKER=5;
 static const int NORMALIZEX=0;
 static const int NORMALIZEY=0;
 
-//KalmanFilter references
 static const float T;
-// static const float PS;
-// static const float PV;
-// static const float Q;
-// static const float R;
 };
 
 #endif

@@ -19,6 +19,11 @@ int main(int argc,char*argv[]){
         string buffer = Network::readFromServer(sock);
         Parser::parse(buffer,os);
 
+        if(!(os.at(0)->kf).initializationStatus()){
+            os.at(0)->initKalmanFilter();
+        }
+        os.at(0)->getNextPosition();
+
         Strategy::AttackerL(os);
         Strategy::AttackerR(os);
         Strategy::Defender(os);
