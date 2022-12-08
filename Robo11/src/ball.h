@@ -7,7 +7,7 @@ using namespace std;
 
 class Ball: public Object{
 
-public:
+private:
     bool found;
 
 public:

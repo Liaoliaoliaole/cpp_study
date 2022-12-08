@@ -20,10 +20,9 @@ int main(int argc,char*argv[]){
         Strategy::AttackerR(os);
         Strategy::Defender(os);
         Strategy::GoalKeeper(os);
-        //Strategy::Midfielder(os);
         string positions = Parser::concatenate(os);
         Network::sendToServer(sock,positions);
     }    
-    sock->close();
+    Network::closeConnection(sock);
     return 0;
 }

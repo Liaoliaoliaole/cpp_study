@@ -9,10 +9,10 @@
 class Network
 {
 public:
-
 static shared_ptr<Socket> connectToServer();
 static string readFromServer(shared_ptr<Socket> &sock);
 static void sendToServer(shared_ptr<Socket> &sock,string &ts);
+static void closeConnection(shared_ptr<Socket> &sock);
 };
 
 #endif

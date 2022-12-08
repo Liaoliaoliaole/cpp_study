@@ -26,3 +26,8 @@ void Network::sendToServer(shared_ptr<Socket> &sock,string &ts)
 {
     sock->socket_write(ts);
 }
+
+void Network::closeConnection(shared_ptr<Socket> &sock)
+{
+    sock->close();
+}

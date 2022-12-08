@@ -7,7 +7,7 @@ enum class objectTypes{None,Ball,Player,Opponent};
 
 class Object
 {
-public:
+protected:
     Vector2 position;
     Vector2 target;
     string id;
@@ -20,6 +20,9 @@ public:
     
     virtual objectTypes getType()=0;
     virtual Vector2 getTarget()=0;
+    Vector2 getPosition();
+    void setX(int x);
+    void setY(int y);
     void setPosition(Vector2 &p);
     string getID();
 

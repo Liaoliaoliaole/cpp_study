@@ -19,6 +19,20 @@ Object::Object(string id)
 Object::~Object(){
 }
 
+Vector2 Object::getPosition()
+{
+  return this->position;
+}
+
+void Object::setX(int x)
+{
+  this->position.x=x;
+}
+
+void Object::setY(int y){
+  this->position.y=y;
+}
+
 void Object::setPosition(Vector2 &p)
 {
   this->position.x = p.x;

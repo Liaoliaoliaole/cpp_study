@@ -32,7 +32,7 @@ objectTypes Ball::getType(){
 Vector2 Ball::getTarget()
 {
     Vector2 t;
-    //calculate the ball moving derection
+    //calculate the ball moving derection by kalman filter
     return t;
 }
 

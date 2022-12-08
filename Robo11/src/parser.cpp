@@ -38,8 +38,8 @@ void Parser::parse(string &str,vector<shared_ptr<Object>> &os)
         {
             if(s==(ob->getID()))
             {
-                ob->position.x=round(x);
-                ob->position.y=round(y);
+                ob->setX(round(x));
+                ob->setY(round(y));
             }
         }
     } 
@@ -57,30 +57,10 @@ string Parser::concatenate(vector<shared_ptr<Object>> &os)
             
         }
     }
-    cout << "TARGETS SENT: " << endl;
-    cout << ts << endl;
+    //out << "--------------------TARGETS SENT: " << endl;
+    //cout << ts << endl;
     return ts;    
 }
 
-/* vector<shared_ptr<Vectr>> Parser::circle_dance(int a, int b,int r){
-    if(a<r || b< r){
-        cout << "invalid circle center." << endl;
-        exit(-1);
-    }else{
-    vector<shared_ptr<Vectr>>circle;
-        int x = a-r;
-        int y = b;
-        for(x=a-r;x<a+r;x=x+10){
-            y=b+sqrt(r*r-pow(a-x,2));
-            circle.push_back(make_shared<Vectr>(x,y));
-        }
-        for(x=a+r;x>a-r;x=x-10){
-            y=b-sqrt(r*r-pow(a-x,2));
-            circle.push_back(make_shared<Vectr>(x,y));
-        }
-     return circle;
-    }
-}
- */
 
     

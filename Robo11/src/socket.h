@@ -39,7 +39,7 @@ public:
     int bind(string ip, string port);
     int connect(string ip, string port);
     int listen(int max_queue);
-    //Socket* accept();
+
     unique_ptr<Socket> accept();
     int socket_write(string msg);
     int socket_read(string &buf,int len);

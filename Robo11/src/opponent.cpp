@@ -2,7 +2,6 @@
 #include "ball.h"
 #include "opponent.h"
 
-
 using namespace std;
 
 Opponent::Opponent(string id)
@@ -23,6 +22,6 @@ objectTypes Opponent::getType(){
 Vector2 Opponent::getTarget()
 {
     Vector2 t;
-    //calculate the opponent moving derection
+    //calculate the opponent moving derection by kalman filter
     return t;
 }

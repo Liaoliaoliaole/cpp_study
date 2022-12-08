@@ -9,6 +9,7 @@ using namespace std;
 class Player: public Object{
 private:
     Vector2 target;
+    
 public:
     Player();
     Player(string id);
