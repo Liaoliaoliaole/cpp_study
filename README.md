@@ -4,4 +4,4 @@ Run roboClient.cpp as client
 
 This application has included attacker, defender and goal keeper.
 
-(mast branch is versio 1.0, nmain branch included kalman filter, which is still under developping)
+(master branch is versio 1.0, nmain branch included kalman filter, which is still under developping)
